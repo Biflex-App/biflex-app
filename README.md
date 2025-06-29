@@ -7,6 +7,8 @@ Setup `.env.local` on root directory
 ```
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_ZGVlcC1idWxsZnJvZy04OC5jbGVyay5hY2NvdW50cy5kZXYk
 CLERK_SECRET_KEY=ask_for_key
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/signin
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/signup
 ```
 
 First, run the development server:
