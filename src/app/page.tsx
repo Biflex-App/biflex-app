@@ -1,16 +1,7 @@
-import { SignedIn, SignedOut, SignIn, UserButton } from "@clerk/nextjs";
+import MarketingPage from "./marketing";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div>
-      <SignedOut>
-        Signed Out
-        <SignIn routing="hash" />
-      </SignedOut>
-      <SignedIn>
-        Signed In
-        <UserButton showName/>
-      </SignedIn>
-    </div>
+    <MarketingPage/>
   );
 }
