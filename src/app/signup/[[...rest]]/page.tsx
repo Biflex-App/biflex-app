@@ -2,6 +2,10 @@ import { SignUp } from "@clerk/nextjs";
 
 export default function SignUpPage() {
   return (
-    <SignUp/>
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <SignUp />
+      </div>
+    </div>
   );
 }
