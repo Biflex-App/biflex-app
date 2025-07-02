@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export const unauthorized = (message: string = 'Unauthorized') =>
   NextResponse.json({ error: message }, { status: 401 });
 
-export const notFound = (message: string = 'User not found') =>
+export const notFound = (message: string = 'Not found') =>
   NextResponse.json({ error: message }, { status: 404 });
 
 export const badRequest = (message: string = 'Unknown error') =>
