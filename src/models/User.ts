@@ -74,5 +74,20 @@ const UserSchema: Schema = new Schema({
   timestamps: true,
 });
 
+export const toUserDto = (user: IUser, userId: string) => {
+  if (user.clerkId === userId) {
+    return user.toObject();
+  }
+
+  return {
+    _id: user._id,
+    handle: user.handle,
+    firstname: user.firstname,
+    lastname: user.lastname,
+    symbol: user.symbol,
+    color: user.color,
+  };
+};
+
 // Prevent mongoose from creating the model multiple times
 export default mongoose.models.User || mongoose.model<IUser>('User', UserSchema);

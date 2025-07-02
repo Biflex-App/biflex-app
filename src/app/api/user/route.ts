@@ -1,7 +1,7 @@
 import { getAuth } from '@clerk/nextjs/server';
 import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/db';
-import User, { IUser } from '@/models/User';
+import User, { IUser, toUserDto } from '@/models/User';
 import { unauthorized, badRequest, ok } from '@/app/api/response';
 
 export async function POST(req: NextRequest) {
@@ -36,19 +36,6 @@ export async function GET(req: NextRequest) {
     return unauthorized();
   }
   const users: IUser[] = await User.find();
-  const filteredUsers = users.map((user) => {
-    if (user.clerkId === userId) {
-      return user;
-    } else {
-      return {
-        _id: user._id,
-        handle: user.handle,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        symbol: user.symbol,
-        color: user.color,
-      };
-    }
-  });
+  const filteredUsers = users.map((user) => toUserDto(user, userId));
   return ok(filteredUsers);
 }

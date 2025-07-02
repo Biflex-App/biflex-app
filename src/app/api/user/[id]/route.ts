@@ -1,7 +1,7 @@
 import { getAuth } from '@clerk/nextjs/server';
 import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/db';
-import User from '@/models/User';
+import User, { toUserDto } from '@/models/User';
 import { unauthorized, notFound, badRequest, ok } from '@/app/api/response';
 
 export async function GET(
@@ -16,18 +16,7 @@ export async function GET(
   try {
     const user = await User.findById(params.id);
     if (!user) return notFound();
-    if (user.clerkId === userId) {
-      return ok(user);
-    } else {
-      return ok({
-        _id: user._id,
-        handle: user.handle,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        symbol: user.symbol,
-        color: user.color,
-      });
-    }
+    return ok(toUserDto(user, userId));
   } catch (error) {
     return badRequest(error instanceof Error ? error.message : 'Unknown error');
   }
