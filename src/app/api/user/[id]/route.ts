@@ -1,8 +1,8 @@
 import { getAuth } from '@clerk/nextjs/server';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/db';
 import User from '@/models/User';
-import { UNAUTHORIZED_ERROR, NOT_FOUND_ERROR, BAD_REQUEST_ERROR } from '@/app/api/error';
+import { unauthorized, notFound, badRequest, ok } from '@/app/api/response';
 
 export async function GET(
   req: NextRequest,
@@ -11,15 +11,15 @@ export async function GET(
   await dbConnect();
   const { userId } = getAuth(req);
   if (!userId) {
-    return NextResponse.json(...UNAUTHORIZED_ERROR);
+    return unauthorized();
   }
   try {
     const user = await User.findById(params.id);
-    if (!user) return NextResponse.json(...NOT_FOUND_ERROR);
+    if (!user) return notFound();
     if (user.clerkId === userId) {
-      return NextResponse.json(user);
+      return ok(user);
     } else {
-      return NextResponse.json({
+      return ok({
         _id: user._id,
         handle: user.handle,
         firstname: user.firstname,
@@ -29,8 +29,7 @@ export async function GET(
       });
     }
   } catch (error) {
-    const badRequest = BAD_REQUEST_ERROR(error instanceof Error ? error.message : 'Unknown error');
-    return NextResponse.json(...badRequest);
+    return badRequest(error instanceof Error ? error.message : 'Unknown error');
   }
 }
 
@@ -41,7 +40,7 @@ export async function PUT(
   await dbConnect();
   const { userId } = getAuth(req);
   if (!userId) {
-    return NextResponse.json(...UNAUTHORIZED_ERROR);
+    return unauthorized();
   }
   const { handle, firstname, lastname, symbol, color } = await req.json();
   try {
@@ -50,10 +49,9 @@ export async function PUT(
       { handle, firstname, lastname, symbol, color },
       { new: true, runValidators: true }
     );
-    if (!user) return NextResponse.json(...NOT_FOUND_ERROR);
-    return NextResponse.json(user);
+    if (!user) return notFound();
+    return ok(user);
   } catch (error) {
-    const badRequest = BAD_REQUEST_ERROR(error instanceof Error ? error.message : 'Unknown error');
-    return NextResponse.json(...badRequest);
+    return badRequest(error instanceof Error ? error.message : 'Unknown error');
   }
 }
