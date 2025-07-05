@@ -2,12 +2,9 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IUser extends Document {
   handle: string; // Unique handle up to 15 characters
-  firstname: string;
-  lastname: string;
+  name: string;
   email: string;
   clerkId: string; // Required clerk account ID
-  symbol: string; // Single emoji or alphabet character
-  color: string; // Hex color code
   createdAt: Date;
   updatedAt: Date;
 }
@@ -26,14 +23,9 @@ const UserSchema: Schema = new Schema({
       message: 'Handle can only contain letters, numbers, and underscores'
     }
   },
-  firstname: {
+  name: {
     type: String,
-    required: [true, 'Please provide a first name'],
-    trim: true
-  },
-  lastname: {
-    type: String,
-    required: [true, 'Please provide a last name'],
+    required: [true, 'Please provide a name'],
     trim: true
   },
   email: {
@@ -45,30 +37,6 @@ const UserSchema: Schema = new Schema({
     type: String,
     required: [true, 'Please provide a Clerk ID'],
     trim: true
-  },
-  symbol: {
-    type: String,
-    required: true,
-    validate: {
-      validator: function(v: string) {
-        // Check if it's a single emoji or single alphabet character
-        const isEmoji = /^[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]$/u;
-        const isSingleChar = /^[a-zA-Z]$/;
-        return isEmoji.test(v) || isSingleChar.test(v);
-      },
-      message: 'Symbol must be a single emoji or single alphabet character'
-    }
-  },
-  color: {
-    type: String,
-    required: true,
-    validate: {
-      validator: function(v: string) {
-        // Hex color validation (with or without #)
-        return /^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(v);
-      },
-      message: 'Color must be a valid hex color code'
-    }
   }
 }, {
   timestamps: true,
@@ -82,10 +50,7 @@ export const toUserDto = (user: IUser, userId: string) => {
   return {
     _id: user._id,
     handle: user.handle,
-    firstname: user.firstname,
-    lastname: user.lastname,
-    symbol: user.symbol,
-    color: user.color,
+    name: user.name,
   };
 };
 
