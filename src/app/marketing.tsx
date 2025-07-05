@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import Link from "next/link";
 
 export default function MarketingPage() {
   return (
@@ -14,7 +15,7 @@ export default function MarketingPage() {
               Your personal workout companion that works everywhere
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 gap-8">
             <div className="border-2 border-border bg-secondary-background p-8 shadow-shadow">
               <h2 className="text-2xl font-heading text-foreground mb-4">Get Started</h2>
@@ -24,16 +25,16 @@ export default function MarketingPage() {
               <div className="space-y-4">
                 <div className="text-center">
                   <p className="text-sm text-foreground/60 mb-2">Already have an account?</p>
-                  <a 
-                    href="/signin" 
+                                    <Link
+                    href="/signin"
                     className="inline-block font-base text-foreground hover:text-main border-b-2 border-border hover:border-main transition-colors"
                   >
                     SIGN IN HERE
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
-            
+
             <div className="border-2 border-border bg-main p-8 shadow-shadow">
               <h2 className="text-2xl font-heading text-main-foreground mb-4">Key Features</h2>
               <ul className="space-y-3 text-main-foreground">

@@ -1,12 +1,13 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, Model, Types } from 'mongoose';
 
 export interface IUser extends Document {
-  handle: string; // Unique handle up to 15 characters
-  name: string;
-  email: string;
-  clerkId: string; // Required clerk account ID
-  createdAt: Date;
-  updatedAt: Date;
+  _id: Types.ObjectId
+  handle: string // Unique handle up to 15 characters
+  name: string
+  email: string
+  clerkId: string // Required clerk account ID
+  createdAt: Date
+  updatedAt: Date
 }
 
 const UserSchema: Schema = new Schema({
@@ -42,17 +43,6 @@ const UserSchema: Schema = new Schema({
   timestamps: true,
 });
 
-export const toUserDto = (user: IUser, userId: string) => {
-  if (user.clerkId === userId) {
-    return user.toObject();
-  }
-
-  return {
-    _id: user._id,
-    handle: user.handle,
-    name: user.name,
-  };
-};
-
 // Prevent mongoose from creating the model multiple times
-export default mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
+const UserModel: Model<IUser> = mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
+export default UserModel;

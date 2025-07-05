@@ -1,24 +1,24 @@
 import { getAuth } from '@clerk/nextjs/server';
 import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/db';
-import User, { IUser, toUserDto } from '@/models/User';
 import { unauthorized, badRequest, ok } from '@/app/api/response';
+import { createUser, getUsers } from '@/services/userService';
 
 export async function POST(req: NextRequest) {
   await dbConnect();
   const { userId, sessionClaims } = getAuth(req);
-  if (!userId) {
+  if (!userId || !sessionClaims || !sessionClaims.email) {
     return unauthorized();
   }
 
-  const email = sessionClaims?.email;
+  const email = sessionClaims.email as string;
   const { handle, name } = await req.json();
   try {
-    const user = await User.create({
+    const user = await createUser({
       handle,
       name,
-      clerkId: userId,
       email,
+      clerkId: userId
     });
     return ok(user, 201);
   } catch (error) {
@@ -37,12 +37,14 @@ export async function GET(
   }
 
   const handle = searchParams.get('handle');
-  let userQuery = User.find();
-  if (handle) {
-    userQuery = userQuery.where('handle', handle);
-  }
+  // let userQuery = User.find();
+  // if (handle) {
+  //   userQuery = userQuery.where('handle', handle);
+  // }
 
-  const users: IUser[] = await userQuery;
-  const filteredUsers = users.map((user) => toUserDto(user, userId));
-  return ok(filteredUsers);
+  const users = await getUsers(
+    { ...(handle ? { handle } : null) },
+    userId,
+  );
+  return ok(users);
 }

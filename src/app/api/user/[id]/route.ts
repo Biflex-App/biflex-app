@@ -1,8 +1,8 @@
 import { getAuth } from '@clerk/nextjs/server';
 import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/db';
-import User, { toUserDto } from '@/models/User';
 import { unauthorized, notFound, badRequest, ok } from '@/app/api/response';
+import { getUserById, updateUser } from '@/services/userService';
 
 export async function GET(
   req: NextRequest,
@@ -15,9 +15,8 @@ export async function GET(
   }
 
   try {
-    const user = await User.findById(params.id);
-    if (!user) return notFound();
-    return ok(toUserDto(user, userId));
+    const userDto = await getUserById(params.id, userId);
+    return ok(userDto);
   } catch (error) {
     return badRequest(error instanceof Error ? error.message : 'Unknown error');
   }
@@ -35,13 +34,13 @@ export async function PUT(
 
   const { handle, name } = await req.json();
   try {
-    const user = await User.findByIdAndUpdate(
+    const userDto = await updateUser(
       params.id,
       { handle, name },
-      { new: true, runValidators: true }
-    );
-    if (!user) return notFound();
-    return ok(user);
+      userId,
+    )
+    if (!userDto) return notFound();
+    return ok(userDto);
   } catch (error) {
     return badRequest(error instanceof Error ? error.message : 'Unknown error');
   }
