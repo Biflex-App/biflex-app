@@ -13,6 +13,7 @@ export async function GET(
   if (!userId) {
     return unauthorized();
   }
+
   try {
     const user = await User.findById(params.id);
     if (!user) return notFound();
@@ -31,6 +32,7 @@ export async function PUT(
   if (!userId) {
     return unauthorized();
   }
+
   const { handle, name } = await req.json();
   try {
     const user = await User.findByIdAndUpdate(

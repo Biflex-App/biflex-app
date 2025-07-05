@@ -10,9 +10,9 @@ export async function POST(req: NextRequest) {
   if (!userId) {
     return unauthorized();
   }
+
   const email = sessionClaims?.email;
   const { handle, name } = await req.json();
-
   try {
     const user = await User.create({
       handle,
@@ -26,13 +26,23 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET(
+  req: NextRequest,
+  { searchParams }: { searchParams: URLSearchParams }
+) {
   await dbConnect();
   const { userId } = getAuth(req);
   if (!userId) {
     return unauthorized();
   }
-  const users: IUser[] = await User.find();
+
+  const handle = searchParams.get('handle');
+  let userQuery = User.find();
+  if (handle) {
+    userQuery = userQuery.where('handle', handle);
+  }
+
+  const users: IUser[] = await userQuery;
   const filteredUsers = users.map((user) => toUserDto(user, userId));
   return ok(filteredUsers);
 }
