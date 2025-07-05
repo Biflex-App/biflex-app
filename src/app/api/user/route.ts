@@ -11,15 +11,12 @@ export async function POST(req: NextRequest) {
     return unauthorized();
   }
   const email = sessionClaims?.email;
-  const { handle, firstname, lastname, symbol, color } = await req.json();
+  const { handle, name } = await req.json();
 
   try {
     const user = await User.create({
       handle,
-      firstname,
-      lastname,
-      symbol,
-      color,
+      name,
       clerkId: userId,
       email,
     });

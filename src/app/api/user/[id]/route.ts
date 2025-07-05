@@ -31,11 +31,11 @@ export async function PUT(
   if (!userId) {
     return unauthorized();
   }
-  const { handle, firstname, lastname, symbol, color } = await req.json();
+  const { handle, name } = await req.json();
   try {
     const user = await User.findByIdAndUpdate(
       params.id,
-      { handle, firstname, lastname, symbol, color },
+      { handle, name },
       { new: true, runValidators: true }
     );
     if (!user) return notFound();
