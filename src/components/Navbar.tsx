@@ -15,7 +15,7 @@ export default function Navbar() {
               BIFLEX
             </Link>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <SignedOut>
               <Link href="/signin">
@@ -35,11 +35,7 @@ export default function Navbar() {
             </SignedOut>
             <SignedIn>
               <SignOutButton>
-                <Button
-                  className="font-base text-foreground hover:bg-background hover:text-foreground border-2 border-border shadow-shadow hover:shadow-[2px_2px_0px_0px_var(--border)] transition-all"
-                >
-                  SIGN OUT
-                </Button>
+                SIGN OUT
               </SignOutButton>
             </SignedIn>
           </div>
@@ -47,4 +43,4 @@ export default function Navbar() {
       </div>
     </nav>
   );
-} 
+}
