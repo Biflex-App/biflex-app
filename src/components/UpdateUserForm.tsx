@@ -52,7 +52,7 @@ export default function UpdateUserForm({
                 </>
               ) : (
                 <>
-                  <CardTitle>Setup your account</CardTitle>
+                  <CardTitle>Create your account</CardTitle>
                   <CardDescription>
                     Enter your name and choose your handle
                   </CardDescription>
@@ -117,7 +117,7 @@ export default function UpdateUserForm({
           </CardContent>
           <CardFooter className="flex-col gap-2">
             <Button type="submit" className="w-full">
-              Login
+              { user ? 'Update Account' : 'Create Account' }
             </Button>
           </CardFooter>
         </Card>
