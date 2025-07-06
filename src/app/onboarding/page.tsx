@@ -3,11 +3,7 @@ import { getUserSelf } from "@/services/userService";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-export default async function DashboardLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function OnboardingPage() {
   const { userId } = await auth();
 
   if (!userId) {
@@ -16,14 +12,14 @@ export default async function DashboardLayout({
 
   const user = await getUserSelf(userId);
 
-  if (!user) {
-    redirect('/onboarding');
+  if (user) {
+    redirect('/dashboard');
   }
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      {children}
+      <h1>Onboarding</h1>
     </div>
   );
 }
