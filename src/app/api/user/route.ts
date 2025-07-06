@@ -1,41 +1,40 @@
 import { getAuth } from '@clerk/nextjs/server';
 import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/db';
-import User, { IUser, toUserDto } from '@/models/User';
-import { unauthorized, badRequest, ok } from '@/app/api/response';
+import { UnauthorizedResponse, createOkResponse, responseHandler } from '@/app/api/response';
+import { createUser, getUsers } from '@/services/userService';
 
-export async function POST(req: NextRequest) {
-  await dbConnect();
+const createUserHandler = async (req: NextRequest) => {
   const { userId, sessionClaims } = getAuth(req);
-  if (!userId) {
-    return unauthorized();
+  if (!userId || !sessionClaims || !sessionClaims.email) {
+    throw new UnauthorizedResponse();
   }
-  const email = sessionClaims?.email;
-  const { handle, firstname, lastname, symbol, color } = await req.json();
 
-  try {
-    const user = await User.create({
-      handle,
-      firstname,
-      lastname,
-      symbol,
-      color,
-      clerkId: userId,
-      email,
-    });
-    return ok(user, 201);
-  } catch (error) {
-    return badRequest(error instanceof Error ? error.message : 'Unknown error');
-  }
+  await dbConnect();
+  const email = sessionClaims.email as string;
+  const { handle, name } = await req.json();
+  const user = await createUser({
+    handle,
+    name,
+    email,
+    clerkId: userId
+  });
+  return createOkResponse(user, 201);
 }
 
-export async function GET(req: NextRequest) {
-  await dbConnect();
+const listUsersHandler = async (req: NextRequest) => {
   const { userId } = getAuth(req);
   if (!userId) {
-    return unauthorized();
+    throw new UnauthorizedResponse();
   }
-  const users: IUser[] = await User.find();
-  const filteredUsers = users.map((user) => toUserDto(user, userId));
-  return ok(filteredUsers);
+
+  await dbConnect();
+  const handle = req.nextUrl.searchParams.get('handle');
+  return await getUsers(
+    { ...(handle ? { handle } : null) },
+    userId,
+  );
 }
+
+export const POST = responseHandler(createUserHandler);
+export const GET = responseHandler(listUsersHandler);

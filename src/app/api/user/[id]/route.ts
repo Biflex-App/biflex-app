@@ -1,46 +1,40 @@
 import { getAuth } from '@clerk/nextjs/server';
 import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/db';
-import User, { toUserDto } from '@/models/User';
-import { unauthorized, notFound, badRequest, ok } from '@/app/api/response';
+import { responseHandler, RouteHandlerContext, UnauthorizedResponse } from '@/app/api/response';
+import { getUserById, updateUser } from '@/services/userService';
 
-export async function GET(
+export const getUserHandler = async (
   req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  await dbConnect();
+  { params }: RouteHandlerContext
+) => {
   const { userId } = getAuth(req);
   if (!userId) {
-    return unauthorized();
+    throw new UnauthorizedResponse();
   }
-  try {
-    const user = await User.findById(params.id);
-    if (!user) return notFound();
-    return ok(toUserDto(user, userId));
-  } catch (error) {
-    return badRequest(error instanceof Error ? error.message : 'Unknown error');
-  }
+
+  await dbConnect();
+  return await getUserById(params.id as string, userId);
 }
 
-export async function PUT(
+export const GET = responseHandler(getUserHandler)
+
+export const updateUserHandler = async (
   req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  await dbConnect();
+  { params }: RouteHandlerContext
+) => {
   const { userId } = getAuth(req);
   if (!userId) {
-    return unauthorized();
+    throw new UnauthorizedResponse();
   }
-  const { handle, firstname, lastname, symbol, color } = await req.json();
-  try {
-    const user = await User.findByIdAndUpdate(
-      params.id,
-      { handle, firstname, lastname, symbol, color },
-      { new: true, runValidators: true }
-    );
-    if (!user) return notFound();
-    return ok(user);
-  } catch (error) {
-    return badRequest(error instanceof Error ? error.message : 'Unknown error');
-  }
+
+  const { handle, name } = await req.json();
+  await dbConnect();
+  return await updateUser(
+    params.id as string,
+    { handle, name },
+    userId,
+  );
 }
+
+export const PUT = responseHandler(updateUserHandler);

@@ -9,7 +9,7 @@ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_ZGVlcC1idWxsZnJvZy04OC5jbGVyay5hY2NvdW
 CLERK_SECRET_KEY=ask_for_key
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/signin
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/signup
-MONGODB_URI=mongodb://user:pass@localhost:27017/?authSource=admin&retryWrites=true&w=majority
+MONGODB_URI=mongodb://user:pass@localhost:27017/biflex?authSource=admin&retryWrites=true&w=majority
 ```
 
 First, run the development server:
