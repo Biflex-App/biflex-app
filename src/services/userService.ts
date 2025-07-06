@@ -1,3 +1,4 @@
+import { NotFoundResponse } from "@/app/api/response";
 import User, { IUser } from "@/models/User";
 
 export interface UserCreatePayload {
@@ -51,6 +52,11 @@ export const toUserDto = (user: IUser | null, clerkId?: string | null) => {
 
 export const getUserById = async (id: string, clerkId?: string | null) => {
   const user = await User.findById(id);
+
+  if (!user) {
+    throw new NotFoundResponse();
+  }
+
   return toUserDto(user, clerkId);
 }
 
@@ -83,7 +89,7 @@ export const updateUser = async (
 ) => {
   const user = await User.findById(id);
   if (!user) {
-    throw new Error('Not found')
+    throw new NotFoundResponse();
   }
 
   if (payload.handle) {
