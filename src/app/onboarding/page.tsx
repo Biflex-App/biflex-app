@@ -1,4 +1,3 @@
-import Navbar from "@/components/Navbar";
 import UpdateUserForm from "@/components/UpdateUserForm";
 import { getUserSelf } from "@/services/userService";
 import { auth, currentUser } from "@clerk/nextjs/server";
@@ -21,12 +20,12 @@ export default async function OnboardingPage() {
   const clerkUser = await currentUser();
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <UpdateUserForm
-        onboarding
-        onboardingEmail={clerkUser?.emailAddresses[0].emailAddress}
-      />
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <UpdateUserForm
+          onboardingEmail={clerkUser?.emailAddresses[0].emailAddress}
+        />
+      </div>
     </div>
   );
 }
