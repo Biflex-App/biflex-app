@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
+import UpdateUserForm from "@/components/UpdateUserForm";
 import { getUserSelf } from "@/services/userService";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 export default async function OnboardingPage() {
@@ -14,12 +15,18 @@ export default async function OnboardingPage() {
 
   if (user) {
     redirect('/dashboard');
+    return;
   }
+
+  const clerkUser = await currentUser();
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <h1>Onboarding</h1>
+      <UpdateUserForm
+        onboarding
+        onboardingEmail={clerkUser?.emailAddresses[0].emailAddress}
+      />
     </div>
   );
 }
