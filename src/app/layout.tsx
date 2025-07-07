@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ClerkProvider from "@/providers/clerkProvider";
+import QueryProvider from "@/providers/queryProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,7 +15,9 @@ function GlobalProviders ({
 }>) {
   return (
     <ClerkProvider>
-      {children}
+      <QueryProvider>
+        {children}
+      </QueryProvider>
     </ClerkProvider>
   );
 }
