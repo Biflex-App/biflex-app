@@ -14,6 +14,8 @@ import { Skeleton } from "./ui/skeleton";
 import { useCreateUser, useUpdateUser } from "@/hooks/user";
 import { Spinner } from "./ui/spinner";
 import { useRouter } from "next/navigation";
+import { ApiError } from "@/lib/api";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   email: z.string(),
@@ -48,21 +50,29 @@ export default function UpdateUserForm({
   });
 
   const onSubmit = useCallback(async (values: z.infer<typeof formSchema>) => {
-    if (user) {
-      await updateUser.mutateAsync({
-        id: user._id.toString(),
-        data: {
+    try {
+      if (user) {
+        await updateUser.mutateAsync({
+          id: user._id.toString(),
+          data: {
+            name: values.name,
+            handle: values.handle,
+          }
+        });
+        toast.success("Account updated");
+      }
+      else {
+        await createUser.mutateAsync({
           name: values.name,
           handle: values.handle,
-        }
-      });
+        });
+        router.push('/dashboard');
+      }
     }
-    else {
-      await createUser.mutateAsync({
-        name: values.name,
-        handle: values.handle,
-      });
-      router.push('/dashboard');
+    catch (error) {
+      if (error instanceof ApiError && error.status < 500) {
+        toast.error(error.message);
+      }
     }
   }, [user, createUser, updateUser, router]);
 
