@@ -10,9 +10,9 @@ const request = async <T>(
 }
 
 export const useApi = (authenticated: boolean) => {
-  const { getToken, isSignedIn } = useAuth();
+  const { getToken, isSignedIn, isLoaded } = useAuth();
 
-  if (authenticated && !isSignedIn) {
+  if (isLoaded && authenticated && !isSignedIn) {
     throw new Error('User is not signed in');
   }
 
@@ -20,6 +20,7 @@ export const useApi = (authenticated: boolean) => {
 
   return {
     client,
+    ready: isLoaded,
 
     get<T>(config?: AxiosRequestConfig) {
       return request<T>(client, { ...config, method: 'GET' });

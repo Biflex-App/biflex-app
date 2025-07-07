@@ -8,6 +8,8 @@ import { Input } from "./ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
+import { useCallback } from "react";
+import { useApi } from "@/hooks/api";
 
 const formSchema = z.object({
   email: z.string(),
@@ -27,6 +29,7 @@ export default function UpdateUserForm({
   user?: IUser,
   onboardingEmail?: string
 }) {
+  const api = useApi(true);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,9 +39,26 @@ export default function UpdateUserForm({
     }
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-  }
+  const onSubmit = useCallback(async (values: z.infer<typeof formSchema>) => {
+    if (user) {
+      await api.put({
+        url: `/user/${user._id.toString()}`,
+        data: {
+          name: values.name,
+          handle: values.handle,
+        }
+      });
+    }
+    else {
+      await api.post({
+        url: '/user',
+        data: {
+          name: values.name,
+          handle: values.handle,
+        }
+      });
+    }
+  }, [api, user]);
 
   return (
     <Form {...form}>
