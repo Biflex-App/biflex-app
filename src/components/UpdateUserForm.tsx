@@ -66,6 +66,7 @@ export default function UpdateUserForm({
           name: values.name,
           handle: values.handle,
         });
+        toast.success("Welcom to Biflex");
         router.push('/dashboard');
       }
     }
@@ -104,7 +105,7 @@ export default function UpdateUserForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Card className="w-full max-w-sm bg-secondary-background">
+        <Card className="w-full min-w-[320px] max-w-[400px] sm:min-w-[450px] sm:max-w-[500px] md:min-w-[500px] md:max-w-[600px] bg-secondary-background">
           <CardHeader>
             {
               user ? (
