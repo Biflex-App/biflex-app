@@ -15,7 +15,7 @@ function Spinner({ className, size = "md", ...props }: SpinnerProps) {
     <div
       data-slot="spinner"
       className={cn(
-        "animate-spin rounded-full border-2 border-background border-t-border",
+        "animate-spin rounded-full border-2 border-border border-t-main",
         sizeClasses[size],
         className,
       )}

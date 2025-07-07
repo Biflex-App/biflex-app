@@ -11,6 +11,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useCallback } from "react";
 import { useApi } from "@/hooks/api";
 import { Skeleton } from "./ui/skeleton";
+import { useCreateUser, useUpdateUser } from "@/hooks/user";
+import { Spinner } from "./ui/spinner";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string(),
@@ -31,6 +34,10 @@ export default function UpdateUserForm({
   onboardingEmail?: string
 }) {
   const api = useApi(true);
+  const createUser = useCreateUser();
+  const updateUser = useUpdateUser();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,8 +49,8 @@ export default function UpdateUserForm({
 
   const onSubmit = useCallback(async (values: z.infer<typeof formSchema>) => {
     if (user) {
-      await api.put({
-        url: `/user/${user._id.toString()}`,
+      await updateUser.mutateAsync({
+        id: user._id.toString(),
         data: {
           name: values.name,
           handle: values.handle,
@@ -51,15 +58,13 @@ export default function UpdateUserForm({
       });
     }
     else {
-      await api.post({
-        url: '/user',
-        data: {
-          name: values.name,
-          handle: values.handle,
-        }
+      await createUser.mutateAsync({
+        name: values.name,
+        handle: values.handle,
       });
+      router.push('/dashboard');
     }
-  }, [api, user]);
+  }, [user, createUser, updateUser, router]);
 
   if (!api.ready) {
     return (
@@ -162,8 +167,15 @@ export default function UpdateUserForm({
             </div>
           </CardContent>
           <CardFooter className="flex-col gap-2">
-            <Button type="submit" className="w-full">
-              { user ? 'Update Account' : 'Create Account' }
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={createUser.isPending || updateUser.isPending}
+            >
+              {createUser.isPending || updateUser.isPending
+                ? <Spinner size="sm"/>
+                : (user ? 'Update Account' : 'Create Account')
+              }
             </Button>
           </CardFooter>
         </Card>
