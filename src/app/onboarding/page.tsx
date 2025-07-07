@@ -14,7 +14,6 @@ export default async function OnboardingPage() {
 
   if (user) {
     redirect('/dashboard');
-    return;
   }
 
   const clerkUser = await currentUser();
