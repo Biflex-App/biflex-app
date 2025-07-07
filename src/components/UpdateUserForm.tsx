@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { useCallback } from "react";
 import { useApi } from "@/hooks/api";
+import { Skeleton } from "./ui/skeleton";
 
 const formSchema = z.object({
   email: z.string(),
@@ -59,6 +60,31 @@ export default function UpdateUserForm({
       });
     }
   }, [api, user]);
+
+  if (!api.ready) {
+    return (
+      <Card className="w-full max-w-sm bg-secondary-background">
+        <CardHeader>
+          <CardTitle>
+            <Skeleton className="h-6 w-1/2 mb-2" />
+          </CardTitle>
+          <CardDescription>
+            <Skeleton className="h-4 w-2/3" />
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col gap-3">
+            <Skeleton className="h-10 mb-2" />
+            <Skeleton className="h-10 mb-2" />
+            <Skeleton className="h-10 mb-2" />
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Skeleton className="h-10 w-full" />
+        </CardFooter>
+      </Card>
+    );
+  }
 
   return (
     <Form {...form}>
