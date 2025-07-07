@@ -1,14 +1,14 @@
-import { getAuth } from '@clerk/nextjs/server';
+import { auth } from '@clerk/nextjs/server';
 import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/db';
 import { responseHandler, RouteHandlerContext, UnauthorizedResponse } from '@/app/api/response';
 import { getUserById, updateUser } from '@/services/userService';
 
-export const getUserHandler = async (
+const getUserHandler = async (
   req: NextRequest,
   { params }: RouteHandlerContext
 ) => {
-  const { userId } = getAuth(req);
+  const { userId } = await auth();
   if (!userId) {
     throw new UnauthorizedResponse();
   }
@@ -19,11 +19,11 @@ export const getUserHandler = async (
 
 export const GET = responseHandler(getUserHandler)
 
-export const updateUserHandler = async (
+const updateUserHandler = async (
   req: NextRequest,
   { params }: RouteHandlerContext
 ) => {
-  const { userId } = getAuth(req);
+  const { userId } = await auth();
   if (!userId) {
     throw new UnauthorizedResponse();
   }

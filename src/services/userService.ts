@@ -1,5 +1,6 @@
 import { NotFoundResponse } from "@/app/api/response";
 import User, { IUser } from "@/models/User";
+import dbConnect from "@/lib/db";
 
 export interface UserCreatePayload {
   handle: string
@@ -51,6 +52,7 @@ export const toUserDto = (user: IUser | null, clerkId?: string | null) => {
 };
 
 export const getUserById = async (id: string, clerkId?: string | null) => {
+  await dbConnect();
   const user = await User.findById(id);
 
   if (!user) {
@@ -64,6 +66,7 @@ export const getUsers = async (
   filters?: UserFilters,
   clerkId?: string | null
 ) => {
+  await dbConnect();
   let userQuery = User.find();
   if (filters?.handle) {
     userQuery = userQuery.where('handle', filters.handle);
@@ -73,6 +76,7 @@ export const getUsers = async (
 };
 
 export const getUserSelf = async (clerkId: string) => {
+  await dbConnect();
   const user = await User.findOne({ clerkId });
   return toUserDto(user, clerkId);
 };
@@ -87,6 +91,7 @@ export const updateUser = async (
   payload: UserUpdatePayload,
   clerkId?: string | null
 ) => {
+  await dbConnect();
   const user = await User.findById(id);
   if (!user) {
     throw new NotFoundResponse();

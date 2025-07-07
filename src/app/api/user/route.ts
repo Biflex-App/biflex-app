@@ -1,17 +1,22 @@
-import { getAuth } from '@clerk/nextjs/server';
+import { auth, currentUser } from '@clerk/nextjs/server';
 import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/db';
 import { UnauthorizedResponse, createOkResponse, responseHandler } from '@/app/api/response';
 import { createUser, getUsers } from '@/services/userService';
 
 const createUserHandler = async (req: NextRequest) => {
-  const { userId, sessionClaims } = getAuth(req);
-  if (!userId || !sessionClaims || !sessionClaims.email) {
+  const { userId } = await auth();
+  if (!userId) {
     throw new UnauthorizedResponse();
   }
 
+  const clerkUser = await currentUser();
+  const email = clerkUser?.primaryEmailAddress?.emailAddress;
+  if (!email) {
+    throw new Error('Current user has no email.');
+  }
+
   await dbConnect();
-  const email = sessionClaims.email as string;
   const { handle, name } = await req.json();
   const user = await createUser({
     handle,
@@ -23,7 +28,7 @@ const createUserHandler = async (req: NextRequest) => {
 }
 
 const listUsersHandler = async (req: NextRequest) => {
-  const { userId } = getAuth(req);
+  const { userId } = await auth();
   if (!userId) {
     throw new UnauthorizedResponse();
   }

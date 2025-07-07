@@ -9,6 +9,8 @@ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_ZGVlcC1idWxsZnJvZy04OC5jbGVyay5hY2NvdW
 CLERK_SECRET_KEY=ask_for_key
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/signin
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/signup
+NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=/dashboard
+NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL=/onboarding
 MONGODB_URI=mongodb://user:pass@localhost:27017/biflex?authSource=admin&retryWrites=true&w=majority
 ```
 

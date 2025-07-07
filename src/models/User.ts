@@ -15,6 +15,7 @@ const UserSchema: Schema = new Schema({
     type: String,
     required: true,
     unique: true,
+    minLength: [3, 'Handle must have at least 3 characters'],
     maxlength: [15, 'Handle cannot be more than 15 characters'],
     validate: {
       validator: function(v: string) {
@@ -27,6 +28,8 @@ const UserSchema: Schema = new Schema({
   name: {
     type: String,
     required: [true, 'Please provide a name'],
+    minLength: [3, 'Name must have at least 3 characters'],
+    maxlength: [255, 'Name cannot be more than 255 characters'],
     trim: true
   },
   email: {
