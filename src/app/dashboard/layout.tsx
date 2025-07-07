@@ -1,6 +1,7 @@
 import { getUserSelf } from "@/services/userService";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import DashboardNavBar from "@/components/DashboardNavBar";
 
 export default async function DashboardLayout({
   children,
@@ -22,6 +23,7 @@ export default async function DashboardLayout({
   return (
     <div className="min-h-screen bg-background">
       {children}
+      <DashboardNavBar />
     </div>
   );
 }
