@@ -2,7 +2,7 @@
 
 import ButtonList from "@/components/ButtonList";
 import { useAuth } from "@clerk/clerk-react";
-import { LogOut, Settings } from "lucide-react";
+import { LogOut, Settings, ShieldUser } from "lucide-react";
 
 export default function AccountPage() {
   const { signOut } = useAuth();
@@ -14,6 +14,12 @@ export default function AccountPage() {
           label: 'Update Account Info',
           icon: <Settings/>,
           href: '/dashboard/account/update',
+        },
+        {
+          type: 'link',
+          label: 'Security Settings',
+          icon: <ShieldUser />,
+          href: '/security',
         },
         {
           type: 'action',
