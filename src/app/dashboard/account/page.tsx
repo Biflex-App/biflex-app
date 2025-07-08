@@ -19,7 +19,7 @@ export default function AccountPage() {
           type: 'link',
           label: 'Security Settings',
           icon: <ShieldUser />,
-          href: '/security',
+          href: '/dashboard/account/security',
         },
         {
           type: 'action',
