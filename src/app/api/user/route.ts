@@ -25,7 +25,7 @@ const createUserHandler = async (req: NextRequest) => {
     clerkId: userId
   });
   return createOkResponse(user, 201);
-}
+};
 
 const listUsersHandler = async (req: NextRequest) => {
   const { userId } = await auth();
@@ -39,7 +39,7 @@ const listUsersHandler = async (req: NextRequest) => {
     { ...(handle ? { handle } : null) },
     userId,
   );
-}
+};
 
 export const POST = responseHandler(createUserHandler);
 export const GET = responseHandler(listUsersHandler);
