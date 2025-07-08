@@ -8,7 +8,19 @@ export class ApiError extends Error {
   }
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api';
+const getApiBaseUrl = () => {
+  if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api`;
+  }
+
+  if (process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL) {
+    return `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}/api`;
+  }
+
+  return 'http://localhost:3000/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export const createClient = (getToken?: () => Promise<string | null>): AxiosInstance => {
   const client = axios.create({
