@@ -1,4 +1,4 @@
-import { SignedIn, SignedOut, SignOutButton } from "@clerk/nextjs";
+import { SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -33,11 +33,6 @@ export default function Navbar() {
                 </Button>
               </Link>
             </SignedOut>
-            <SignedIn>
-              <SignOutButton>
-                SIGN OUT
-              </SignOutButton>
-            </SignedIn>
           </div>
         </div>
       </div>

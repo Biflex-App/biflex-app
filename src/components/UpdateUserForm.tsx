@@ -1,6 +1,5 @@
 'use client';
 
-import { IUser } from "@/models/User";
 import z from "zod";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
@@ -16,6 +15,7 @@ import { Spinner } from "./ui/spinner";
 import { useRouter } from "next/navigation";
 import { ApiError } from "@/lib/api";
 import { toast } from "sonner";
+import { UserDto } from "@/services/userService";
 
 const formSchema = z.object({
   email: z.string(),
@@ -32,7 +32,7 @@ export default function UpdateUserForm({
   user,
   onboardingEmail,
 }: {
-  user?: IUser,
+  user?: UserDto,
   onboardingEmail?: string
 }) {
   const api = useApi(true);
@@ -44,8 +44,8 @@ export default function UpdateUserForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: user ? user.email : onboardingEmail,
-      name: '',
-      handle: '',
+      name: user ? user.name : '',
+      handle: user ? user.handle : '',
     }
   });
 
