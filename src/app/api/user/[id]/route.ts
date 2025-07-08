@@ -1,12 +1,18 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/db';
-import { responseHandler, RouteHandlerContext, UnauthorizedResponse } from '@/app/api/response';
+import { responseHandlerWithContext, UnauthorizedResponse } from '@/app/api/response';
 import { getUserById, updateUser } from '@/services/userService';
+
+type ContextType = {
+  params: {
+    id: string
+  }
+};
 
 const getUserHandler = async (
   req: NextRequest,
-  { params }: RouteHandlerContext
+  { params: { id } }: ContextType
 ) => {
   const { userId } = await auth();
   if (!userId) {
@@ -14,14 +20,12 @@ const getUserHandler = async (
   }
 
   await dbConnect();
-  return await getUserById(params.id as string, userId);
-}
-
-export const GET = responseHandler(getUserHandler)
+  return await getUserById(id as string, userId);
+};
 
 const updateUserHandler = async (
   req: NextRequest,
-  { params }: RouteHandlerContext
+  { params: { id } }: ContextType
 ) => {
   const { userId } = await auth();
   if (!userId) {
@@ -31,10 +35,11 @@ const updateUserHandler = async (
   const { handle, name } = await req.json();
   await dbConnect();
   return await updateUser(
-    params.id as string,
+    id,
     { handle, name },
     userId,
   );
-}
+};
 
-export const PUT = responseHandler(updateUserHandler);
+export const GET = responseHandlerWithContext(getUserHandler)
+export const PUT = responseHandlerWithContext(updateUserHandler);
