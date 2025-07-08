@@ -44,8 +44,8 @@ export default function UpdateUserForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: user ? user.email : onboardingEmail,
-      name: '',
-      handle: '',
+      name: user ? user.name : '',
+      handle: user ? user.handle : '',
     }
   });
 
