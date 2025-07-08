@@ -4,6 +4,7 @@ import { ReactNode, useState } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { Spinner } from "./ui/spinner";
+import { cn } from "@/lib/utils";
 
 
 interface BaseItemConfig {
@@ -40,8 +41,9 @@ function ButtonListBaseItem({
 }) {
   return (
     <Button
-      className={`w-full h-12 justify-center bg-secondary-background ${className || ''}`}
+      className={cn('w-full h-12 justify-center bg-secondary-background max-w-md', className)}
       onClick={onClick}
+      disabled={isLoading}
     >
       {
         isLoading
@@ -67,7 +69,7 @@ function ButtonListBaseItem({
 
 function ButtonListLinkItem(config: LinkItemConfig) {
   return (
-    <Link href={config.href} className="w-full">
+    <Link href={config.href} className="w-full max-w-md">
       <ButtonListBaseItem config={config}/>
     </Link>
   );
