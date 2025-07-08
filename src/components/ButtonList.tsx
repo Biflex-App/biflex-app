@@ -40,7 +40,7 @@ function ButtonListBaseItem({
 }) {
   return (
     <Button
-      className={`w-full h-12 justify-center ${className || ''}`}
+      className={`w-full h-12 justify-center bg-secondary-background ${className || ''}`}
       onClick={onClick}
     >
       {
