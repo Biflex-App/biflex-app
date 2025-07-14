@@ -18,9 +18,9 @@ const run = async () => {
         await Exercise.create(updateData)
         console.log(`Created exercise with jsonId: ${jsonId}`)
       } else {
-        // Don't update _id or jsonId
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { _id, jsonId, ...rest } = updateData
-        await Exercise.updateOne({ jsonId }, { $set: rest })
+        await Exercise.updateOne({ jsonId }, { $set: rest }, { runValidators: true })
         console.log(`Updated exercise with jsonId: ${jsonId}`)
       }
     }
