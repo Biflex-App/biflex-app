@@ -1,14 +1,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-const { dbConnect, Exercise } = require('./exerciseScriptUtil')
-const fs = require('fs/promises');
-const pathModule = require('path');
-
-const repoPath = process.env.FREE_EXERCISE_DB_LOCAL_PATH
-
-if (!repoPath) {
-  console.log('Set FREE_EXERCISE_DB_LOCAL_PATH')
-  process.exit(1)
-}
+const { dbConnect, Exercise, getRepoPath } = require('./exerciseScriptUtil')
+const fs = require('fs/promises')
+const pathModule = require('path')
 
 const staticImagePath = 'images/exercises'
 
@@ -26,7 +19,7 @@ const run = async () => {
   for (const ex of exercises) {
     try {
       for (const path of ex.images) {
-        const sourcePath = pathModule.join(repoPath, path)
+        const sourcePath = getRepoPath('exercises', path)
         const staticPath = pathModule.join(__dirname, '../../public', staticImagePath, path)
         await fs.mkdir(pathModule.dirname(staticPath), { recursive: true })
         await fs.copyFile(sourcePath, staticPath)

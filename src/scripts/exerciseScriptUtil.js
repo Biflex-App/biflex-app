@@ -1,22 +1,17 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 require('dotenv').config({ path: `.env.local` })
-const axios = require('axios')
 const mongoose = require('mongoose')
+const pathModule = require('path')
 
-const basePath = 'https://raw.githubusercontent.com/Biflex-App/free-exercise-db/refs/heads/main'
+const repoPath = process.env.FREE_EXERCISE_DB_LOCAL_PATH
 
-const getUrl = (path) => {
-  return `${basePath}/${path}`
+if (!repoPath) {
+  console.log('Set FREE_EXERCISE_DB_LOCAL_PATH')
+  process.exit(1)
 }
 
-const jsonUrl = getUrl('dist/exercises.json')
-
-const fetchExerciseJson = async () => {
-  const response = await axios.get(jsonUrl)
-  if (typeof response.data === 'string') {
-    return JSON.parse(response.data)
-  }
-  return response.data
+const getRepoPath = (...path) => {
+  return pathModule.join(repoPath, ...path)
 }
 
 const MONGODB_URI = process.env.MONGODB_URI
@@ -155,7 +150,7 @@ const ExerciseSchema = new mongoose.Schema({
 const Exercise = mongoose.models.Exercise || mongoose.model('Exercise', ExerciseSchema)
 
 module.exports = {
-  fetchExerciseJson,
+  getRepoPath,
   dbConnect,
   Exercise
 }

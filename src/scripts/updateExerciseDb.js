@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-const { fetchExerciseJson, dbConnect, Exercise } = require('./exerciseScriptUtil')
+const { dbConnect, Exercise, getRepoPath } = require('./exerciseScriptUtil')
+const fs = require('fs/promises')
 
 const run = async () => {
   await dbConnect()
-  const exercises = await fetchExerciseJson()
+  const exercisesRaw = await fs.readFile(getRepoPath('dist', 'exercises.json'), { encoding: 'utf8' })
+  const exercises = JSON.parse(exercisesRaw)
 
   const errors = []
   for (const ex of exercises) {
