@@ -27,6 +27,7 @@ const run = async () => {
 
       ex.images = (ex.images || []).map(path => `/${staticImagePath}/${path}`)
       await ex.save()
+      console.log(`Updated exercise with jsonId: ${ex.jsonId}`)
     }
     catch (error) {
       errors.push({
