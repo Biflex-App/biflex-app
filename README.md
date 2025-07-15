@@ -32,6 +32,38 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Populating the Exercise Collection
+
+Make sure to set the following environment variables:
+
+```
+MONGODB_URI=mongodb://user:pass@localhost:27017/biflex?authSource=admin&retryWrites=true&w=majority
+FREE_EXERCISE_DB_LOCAL_PATH=path/to/local/free-exercise-db
+```
+
+Run the script:
+
+```bash
+node .\src\scripts\updateExerciseDb.js
+```
+
+## Adding images to the
+
+Make sure to set the following environment variables:
+
+```
+MONGODB_URI=mongodb://user:pass@localhost:27017/biflex?authSource=admin&retryWrites=true&w=majority
+FREE_EXERCISE_DB_LOCAL_PATH=path/to/local/free-exercise-db
+```
+
+Populate the Exercise collection via the previous section.
+
+Run the script:
+
+```bash
+node .\src\scripts\addExerciseImages.js
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
