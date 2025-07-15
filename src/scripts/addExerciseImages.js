@@ -18,6 +18,11 @@ const run = async () => {
 
   const errors = []
 
+  await fs.rm(
+    pathModule.join(__dirname, '../../public', staticImagePath),
+    { recursive: true, force: true }
+  )
+
   for (const ex of exercises) {
     try {
       for (const path of ex.images) {
