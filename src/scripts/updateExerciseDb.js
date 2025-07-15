@@ -5,6 +5,7 @@ const run = async () => {
   await dbConnect()
   const exercises = await fetchExerciseJson()
 
+  const errors = []
   for (const ex of exercises) {
     const jsonId = ex.id
     const updateData = { ...ex, id: undefined, jsonId }
@@ -24,9 +25,16 @@ const run = async () => {
         console.log(`Updated exercise with jsonId: ${jsonId}`)
       }
     }
-    catch (e) {
-      console.error(e)
-      console.log(ex)
+    catch (error) {
+      errors.push({
+        exercise: ex,
+        error: error?.message ?? error?.toString() ?? `${error}`,
+      })
+    }
+
+    for (const { error, exercise } of errors) {
+      console.log(error)
+      console.log(exercise)
     }
   }
 }

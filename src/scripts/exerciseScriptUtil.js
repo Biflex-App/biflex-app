@@ -9,10 +9,6 @@ const getUrl = (path) => {
   return `${basePath}/${path}`
 }
 
-const getExerciseImageUrl = (imagePath) => {
-  return getUrl(`exercises/${imagePath}`)
-}
-
 const jsonUrl = getUrl('dist/exercises.json')
 
 const fetchExerciseJson = async () => {
@@ -20,12 +16,6 @@ const fetchExerciseJson = async () => {
   if (typeof response.data === 'string') {
     return JSON.parse(response.data)
   }
-  return response.data
-}
-
-const fetchExerciseImage = async (imagePath) => {
-  const url = getExerciseImageUrl(imagePath)
-  const response = await axios.get(url, { responseType: 'arraybuffer' })
   return response.data
 }
 
@@ -166,7 +156,6 @@ const Exercise = mongoose.models.Exercise || mongoose.model('Exercise', Exercise
 
 module.exports = {
   fetchExerciseJson,
-  fetchExerciseImage,
   dbConnect,
   Exercise
 }
