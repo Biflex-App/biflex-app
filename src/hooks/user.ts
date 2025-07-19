@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApi } from "./api";
 import { UserDto } from "@/services/userService";
+import { AxiosRequestConfig } from "axios";
 
 export const userKeys = {
   all: ['users'] as const,
@@ -11,33 +12,44 @@ export const userKeys = {
   self: () => [...userKeys.all, 'self'] as const,
 };
 
-export const useCurrentUser = () => {
+export const useCurrentUser = (
+  enabled: boolean = true,
+  config: AxiosRequestConfig = {},
+) => {
   const api = useApi(true);
 
   return useQuery({
     queryKey: userKeys.self(),
     queryFn: async () => {
-      const response = await api.get<UserDto>({ url: '/user/self' });
+      const response = await api.get<UserDto>({ ...config, url: '/user/self' });
       return response;
     },
-    enabled: api.ready,
+    enabled: enabled && api.ready,
   });
 };
 
-export const useUser = (id: string) => {
+export const useUser = (
+  id: string,
+  enabled: boolean = true,
+  config: AxiosRequestConfig = {},
+) => {
   const api = useApi(true);
 
   return useQuery({
     queryKey: userKeys.detail(id),
     queryFn: async () => {
-      const response = await api.get<UserDto>({ url: `/user/${id}` });
+      const response = await api.get<UserDto>({ ...config, url: `/user/${id}` });
       return response;
     },
-    enabled: api.ready && !!id,
+    enabled: enabled && api.ready && !!id,
   });
 };
 
-export const useUsers = (filters?: { handle?: string }) => {
+export const useUsers = (
+  filters?: { handle?: string },
+  enabled: boolean = true,
+  config: AxiosRequestConfig = {},
+) => {
   const api = useApi(true);
 
   return useQuery({
@@ -49,20 +61,21 @@ export const useUsers = (filters?: { handle?: string }) => {
       }
 
       const url = `/user${params.toString() ? `?${params.toString()}` : ''}`;
-      const response = await api.get<UserDto[]>({ url });
+      const response = await api.get<UserDto[]>({ ...config, url });
       return response;
     },
-    enabled: api.ready,
+    enabled: enabled && api.ready,
   });
 };
 
-export const useCreateUser = () => {
+export const useCreateUser = (config: AxiosRequestConfig = {}) => {
   const api = useApi(true);
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (data: { handle: string; name: string }) => {
       const response = await api.post<UserDto>({
+        ...config,
         url: '/user',
         data,
       });
@@ -75,13 +88,14 @@ export const useCreateUser = () => {
   });
 };
 
-export const useUpdateUser = () => {
+export const useUpdateUser = (config: AxiosRequestConfig = {}) => {
   const api = useApi(true);
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ id, data }: { id: string; data: { handle?: string; name?: string } }) => {
       const response = await api.put<UserDto>({
+        ...config,
         url: `/user/${id}`,
         data,
       });
@@ -95,13 +109,13 @@ export const useUpdateUser = () => {
   });
 };
 
-export const useDeleteUser = () => {
+export const useDeleteUser = (config: AxiosRequestConfig = {}) => {
   const api = useApi(true);
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (id: string) => {
-      await api.delete({ url: `/user/${id}` });
+      await api.delete({ ...config, url: `/user/${id}` });
     },
     onSuccess: (_, id) => {
       queryClient.removeQueries({ queryKey: userKeys.detail(id) });
