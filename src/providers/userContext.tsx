@@ -11,6 +11,7 @@ export interface IUserContext {
   authId?: string | null
   isUserLoaded: boolean
   user?: UserDto | null
+  isUserFetching?: boolean
   refetchUser?: () => Promise<void>
 }
 
@@ -25,18 +26,23 @@ export default function UserProvider ({
   children: React.ReactNode;
 }>) {
   const { isLoaded, isSignedIn, userId: authId } = useAuth();
-  const { data: user, isLoading, isFetching, refetch } = useCurrentUser(isLoaded && isSignedIn)
-  const refetchUser = async () => {
-    await refetch();
-  }
+  const {
+    data: user,
+    isLoading: isUserLoading,
+    refetch: refetchUser,
+    isFetching: isUserFetching
+  } = useCurrentUser(isLoaded && isSignedIn)
 
   const contextValue: IUserContext = {
     isAuthLoaded: isLoaded,
     isSignedIn,
     authId,
-    isUserLoaded: !isLoading && !isFetching,
+    isUserLoaded: !isUserLoading,
     user,
-    refetchUser,
+    isUserFetching: isUserLoading ? undefined : isUserFetching,
+    refetchUser: isUserLoading ? undefined : async () => {
+      await refetchUser();
+    },
   };
 
   return (
