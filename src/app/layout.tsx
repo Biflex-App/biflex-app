@@ -3,6 +3,7 @@ import "./globals.css";
 import ClerkProvider from "@/providers/clerkProvider";
 import QueryProvider from "@/providers/queryProvider";
 import { Toaster } from "@/components/ui/sonner";
+import UserProvider from "@/providers/userContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,7 +18,9 @@ function GlobalProviders ({
   return (
     <ClerkProvider>
       <QueryProvider>
-        {children}
+        <UserProvider>
+          {children}
+        </UserProvider>
       </QueryProvider>
     </ClerkProvider>
   );

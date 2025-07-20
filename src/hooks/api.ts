@@ -12,11 +12,7 @@ const request = async <T>(
 export const useApi = (authenticated: boolean) => {
   const { getToken, isSignedIn, isLoaded } = useAuth();
 
-  if (isLoaded && authenticated && !isSignedIn) {
-    throw new Error('User is not signed in');
-  }
-
-  const client = createClient(authenticated ? getToken : undefined)
+  const client = createClient((authenticated && isSignedIn) ? getToken : undefined)
 
   return {
     client,
