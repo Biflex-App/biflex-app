@@ -10,7 +10,7 @@ export interface IUserContext {
   isSignedIn?: boolean
   authId?: string | null
   isUserLoaded: boolean
-  user?: UserDto
+  user?: UserDto | null
   refetchUser?: () => Promise<void>
 }
 
@@ -25,7 +25,7 @@ export default function UserProvider ({
   children: React.ReactNode;
 }>) {
   const { isLoaded, isSignedIn, userId: authId } = useAuth();
-  const { data: user, refetch } = useCurrentUser(isLoaded && isSignedIn)
+  const { data: user, isLoading, isFetching, refetch } = useCurrentUser(isLoaded && isSignedIn)
   const refetchUser = async () => {
     await refetch();
   }
@@ -34,7 +34,7 @@ export default function UserProvider ({
     isAuthLoaded: isLoaded,
     isSignedIn,
     authId,
-    isUserLoaded: isLoaded && isSignedIn && Boolean(user),
+    isUserLoaded: !isLoading && !isFetching,
     user,
     refetchUser,
   };
