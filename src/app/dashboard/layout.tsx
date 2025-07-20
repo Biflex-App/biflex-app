@@ -1,23 +1,39 @@
-import { getUserSelf } from "@/services/userService";
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-import DashboardNavBar from "@/components/DashboardNavBar";
+'use client';
 
-export default async function DashboardLayout({
+import DashboardNavBar from "@/components/DashboardNavBar";
+import { useContext, useEffect } from "react";
+import { UserContext } from "@/providers/userContext";
+import { useRouter } from "next/navigation";
+import { Spinner } from "@/components/ui/spinner";
+
+export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { userId } = await auth();
+  const router = useRouter();
+  const user = useContext(UserContext);
 
-  if (!userId) {
-    redirect('/');
-  }
+  useEffect(() => {
+    if (user.isAuthLoaded) {
+      if (!user.isSignedIn) {
+        router.push('/');
+      }
 
-  const user = await getUserSelf(userId);
+      if (user.isUserLoaded && !user.user) {
+        router.push('/onboarding');
+      }
+    }
+  }, [
+    router,
+    user.isAuthLoaded,
+    user.isSignedIn,
+    user.isUserLoaded,
+    user.user,
+  ]);
 
-  if (!user) {
-    redirect('/onboarding');
+  if (!user.isAuthLoaded || !user.isSignedIn || !user.isUserLoaded || !user.user) {
+    return <Spinner/>;
   }
 
   return (
