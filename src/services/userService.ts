@@ -1,4 +1,4 @@
-import { NotFoundResponse } from "@/app/api/response";
+import { NotFoundResponse, UnauthorizedResponse } from "@/app/api/response";
 import User, { IUser } from "@/models/User";
 import Exercise from "@/models/Exercise";
 import dbConnect from "@/lib/db";
@@ -109,6 +109,9 @@ export const updateUser = async (
   if (!user) {
     throw new NotFoundResponse();
   }
+  if (user.clerkId !== clerkId) {
+    throw new UnauthorizedResponse();
+  }
 
   if (payload.handle) {
     user.handle = payload.handle;
@@ -127,12 +130,15 @@ export const updateUser = async (
 export const updateUserRoutine = async (
   routines: UserRoutineDto[],
   userId: string,
-  clerkId?: string | null
+  clerkId: string
 ) => {
   await dbConnect();
   const user = await User.findById(userId);
   if (!user) {
     throw new NotFoundResponse();
+  }
+  if (user.clerkId !== clerkId) {
+    throw new UnauthorizedResponse();
   }
 
   const exerciseIds = new Set<string>();
