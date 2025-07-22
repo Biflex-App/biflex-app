@@ -1,19 +1,20 @@
 import { isPositiveInt } from "@/lib/utils";
 import { Schema, Types } from "mongoose";
+import { IExercise } from "./Exercise";
 
-interface IFixedDurExerciseDetail {
+export interface IFixedDurExerciseDetail {
   type: 'fixed-dur'
   duration: number
 }
 
-interface IDurExerciseDetail {
+export interface IDurExerciseDetail {
   type: 'dur'
   min: number
   max: number
   lastSetToFailure: boolean
 }
 
-interface IRepExerciseDetail {
+export interface IRepExerciseDetail {
   type: 'rep'
   min: number
   max: number
@@ -21,7 +22,7 @@ interface IRepExerciseDetail {
 }
 
 export interface IWorkoutExercise {
-  exerciseId: Types.ObjectId
+  exercise: Types.ObjectId | IExercise
   sets: number
   details: IFixedDurExerciseDetail | IDurExerciseDetail | IRepExerciseDetail
   weightProgression: 'ascending' | 'descending'
@@ -51,7 +52,7 @@ const workoutSchema: Schema = new Schema({
         maxlength: [255, 'Name cannot be more than 255 characters'],
         trim: true
       },
-      exerciseId: {
+      exercise: {
         type: Types.ObjectId,
         required: true,
         ref: 'Exercise',
@@ -97,12 +98,16 @@ const workoutSchema: Schema = new Schema({
       },
     }
   ],
-  schedule: [
-    {
+  schedule: {
+    type: [{
       type: Number,
-      required: true,
-    }
-  ],
+      validate: {
+        validator: isPositiveInt,
+        message: 'Cycle must be a positive integer.'
+      }
+    }],
+    required: true,
+  },
 });
 
 export const routineSchema: Schema = new Schema({
@@ -124,5 +129,9 @@ export const routineSchema: Schema = new Schema({
       message: 'Cycle must be a positive integer.'
     }
   },
-  workouts: [workoutSchema],
+  workouts: {
+    type: [workoutSchema],
+    required: true,
+    default: []
+  },
 });
