@@ -29,12 +29,14 @@ export interface IWorkoutExercise {
 
 export interface IWorkout {
   _id: Types.ObjectId
+  name: string
   exercises: IWorkoutExercise[]
   schedule: number[]
 }
 
-export interface Routine {
+export interface IRoutine {
   _id: Types.ObjectId
+  name: string
   startDate: Date
   cycle: number
   workouts: IWorkout[]
@@ -43,6 +45,12 @@ export interface Routine {
 const workoutSchema: Schema = new Schema({
   exercises: [
     {
+      name: {
+        type: String,
+        required: [true, 'Please provide a name'],
+        maxlength: [255, 'Name cannot be more than 255 characters'],
+        trim: true
+      },
       exerciseId: {
         type: Types.ObjectId,
         required: true,
@@ -98,6 +106,12 @@ const workoutSchema: Schema = new Schema({
 });
 
 export const routineSchema: Schema = new Schema({
+  name: {
+    type: String,
+    required: [true, 'Please provide a name'],
+    maxlength: [255, 'Name cannot be more than 255 characters'],
+    trim: true
+  },
   startDate: {
     type: Date,
     required: true,
