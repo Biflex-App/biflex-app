@@ -1,7 +1,9 @@
 import { NotFoundResponse } from "@/app/api/response";
 import User, { IUser } from "@/models/User";
+import Exercise from "@/models/Exercise";
 import dbConnect from "@/lib/db";
 import { RoutineDto, toRoutineDto } from "./workoutService";
+import { Types } from "mongoose";
 
 export interface UserCreatePayload {
   handle: string
@@ -117,6 +119,60 @@ export const updateUser = async (
   if (payload.email) {
     user.email = payload.email;
   }
+
+  await user.save();
+  return toUserDto(user, clerkId);
+};
+
+export const updateUserRoutine = async (
+  routines: UserRoutineDto[],
+  userId: string,
+  clerkId?: string | null
+) => {
+  await dbConnect();
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new NotFoundResponse();
+  }
+
+  const exerciseIds = new Set<string>();
+  const convertedRoutines = routines.map(ur => {
+    const convertedWorkouts = ur.routine.workouts.map(workout => {
+      const convertedExercises = workout.exercises.map(exercise => {
+        exerciseIds.add(exercise.exerciseId);
+        return {
+          exercise: new Types.ObjectId(exercise.exerciseId),
+          sets: exercise.sets,
+          details: exercise.details,
+          weightProgression: exercise.weightProgression,
+        };
+      });
+      return {
+        name: workout.name,
+        exercises: convertedExercises,
+        schedule: workout.schedule,
+      };
+    });
+    return {
+      routine: {
+        name: ur.routine.name,
+        startDate: new Date(ur.routine.startDate),
+        cycle: ur.routine.cycle,
+        workouts: convertedWorkouts,
+      },
+      enabled: ur.enabled,
+    };
+  });
+
+  const existingExercises = await Exercise.find({
+    _id: { $in: Array.from(exerciseIds).map(id => new Types.ObjectId(id)) }
+  });
+
+  if (existingExercises.length !== exerciseIds.size) {
+    throw new NotFoundResponse('One or more exercises do not exist');
+  }
+
+  user.routines = convertedRoutines;
 
   await user.save();
   return toUserDto(user, clerkId);
