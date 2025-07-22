@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApi } from "./api";
-import { UserDto } from "@/services/userService";
+import { UserDto, UserRoutineDto } from "@/services/userService";
 import { AxiosRequestConfig } from "axios";
 
 export const userKeys = {
@@ -120,6 +120,27 @@ export const useDeleteUser = (config: AxiosRequestConfig = {}) => {
     onSuccess: (_, id) => {
       queryClient.removeQueries({ queryKey: userKeys.detail(id) });
       queryClient.removeQueries({ queryKey: userKeys.self() });
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+    },
+  });
+};
+
+export const useUpdateUserRoutine = (config: AxiosRequestConfig = {}) => {
+  const api = useApi(true);
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: UserRoutineDto[] }) => {
+      const response = await api.put<UserDto>({
+        ...config,
+        url: `/user/${id}/routine`,
+        data,
+      });
+      return response;
+    },
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(userKeys.detail(variables.id), data);
+      queryClient.setQueryData(userKeys.self(), data);
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
     },
   });
