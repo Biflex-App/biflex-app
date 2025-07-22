@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, Model, Types } from 'mongoose';
+import { IRoutine, routineSchema } from './Workout';
 
 export interface IUser extends Document {
   _id: Types.ObjectId
@@ -6,6 +7,10 @@ export interface IUser extends Document {
   name: string
   email: string
   clerkId: string // Required clerk account ID
+  routines: {
+    routine: IRoutine;
+    enabled: boolean;
+  }[];
   createdAt: Date
   updatedAt: Date
 }
@@ -41,7 +46,19 @@ const UserSchema: Schema = new Schema({
     type: String,
     required: [true, 'Please provide a Clerk ID'],
     trim: true
-  }
+  },
+  routines: {
+    type: [
+      {
+        routine: routineSchema,
+        enabled: {
+          type: Boolean,
+          default: true,
+        },
+      }
+    ],
+    default: [],
+  },
 }, {
   timestamps: true,
 });
