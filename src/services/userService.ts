@@ -20,12 +20,17 @@ export interface UserFilters {
   handle?: string | null
 }
 
+export interface UserRoutineDto {
+  routine: RoutineDto
+  enabled: boolean
+}
+
 export interface UserDto {
   _id: string
   handle: string
   name: string
   email?: string
-  routines?: RoutineDto[]
+  routines?: UserRoutineDto[]
   createdAt?: string
   updatedAt?: string
 }
@@ -48,9 +53,9 @@ export const toUserDto = (user: IUser | null, clerkId?: string | null) => {
   return {
     ...dto,
     email: user.email,
-    routines: user.routines.map(ur => ({
-      enabled: ur.enabled,
+    routines: user.routines?.map(ur => ({
       routine: toRoutineDto(ur.routine),
+      enabled: ur.enabled,
     })),
     createdAt: user.createdAt.toISOString(),
     updatedAt: user.updatedAt.toISOString(),
