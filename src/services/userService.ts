@@ -1,6 +1,7 @@
 import { NotFoundResponse } from "@/app/api/response";
 import User, { IUser } from "@/models/User";
 import dbConnect from "@/lib/db";
+import { RoutineDto, toRoutineDto } from "./workoutService";
 
 export interface UserCreatePayload {
   handle: string
@@ -24,6 +25,7 @@ export interface UserDto {
   handle: string
   name: string
   email?: string
+  routines?: RoutineDto[]
   createdAt?: string
   updatedAt?: string
 }
@@ -46,6 +48,10 @@ export const toUserDto = (user: IUser | null, clerkId?: string | null) => {
   return {
     ...dto,
     email: user.email,
+    routines: user.routines.map(ur => ({
+      enabled: ur.enabled,
+      routine: toRoutineDto(ur.routine),
+    })),
     createdAt: user.createdAt.toISOString(),
     updatedAt: user.updatedAt.toISOString(),
   }
