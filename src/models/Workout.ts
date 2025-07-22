@@ -29,14 +29,12 @@ export interface IWorkoutExercise {
 }
 
 export interface IWorkout {
-  _id: Types.ObjectId
   name: string
   exercises: IWorkoutExercise[]
   schedule: number[]
 }
 
 export interface IRoutine {
-  _id: Types.ObjectId
   name: string
   startDate: Date
   cycle: number

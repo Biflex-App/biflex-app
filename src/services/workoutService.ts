@@ -12,14 +12,12 @@ export interface WorkoutExerciseDto {
 }
 
 export interface WorkoutDto {
-  _id: string
   name: string
   exercises: WorkoutExerciseDto[]
   schedule: number[]
 }
 
 export interface RoutineDto {
-  _id: string
   name: string
   startDate: string
   cycle: number
@@ -32,7 +30,6 @@ function isPopulated(exercise: Types.ObjectId | IExercise): exercise is IExercis
 
 export const toWorkoutDto = (workout: IWorkout) => {
   const dto: WorkoutDto = {
-    _id: workout._id.toString(),
     name: workout.name,
     exercises: workout.exercises.map(we => ({
       exerciseId: isPopulated(we.exercise)
@@ -53,7 +50,6 @@ export const toWorkoutDto = (workout: IWorkout) => {
 
 export const toRoutineDto = (routine: IRoutine) => {
   const dto: RoutineDto = {
-    _id: routine._id.toString(),
     name: routine.name,
     startDate: routine.startDate.toISOString(),
     cycle: routine.cycle,
