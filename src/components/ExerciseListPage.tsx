@@ -1,76 +1,41 @@
 'use client';
 
 import { useExercises } from "@/hooks/exercise";
-import { useCallback, useEffect, useRef, useState } from "react";
+import InfiniteScroll from "./InfiniteScroll";
+import { ExerciseDto } from "@/services/exerciseService";
+import { useCallback, useState } from "react";
 import { Spinner } from "./ui/spinner";
 
 export default function ExerciseListPage() {
-  const [displayLength, setDisplayLength] = useState(10);
   const { data: exercises, isLoading } = useExercises();
-  const loader = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const [displayLength, setDisplayLength] = useState(10);
 
   const increaseDisplayLength = useCallback(() => {
     setDisplayLength(d => {
       if (!exercises?.length) {
         return 0;
       }
-
-      const newLength = Math.min(d + 10, exercises.length);
-      return newLength;
+      return Math.min(d + 10, exercises.length);
     });
   }, [exercises?.length]);
 
-  useEffect(() => {
-    if (isLoading) {
-      return;
-    }
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        if (entry.isIntersecting && exercises && displayLength < exercises.length) {
-          increaseDisplayLength();
-        }
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '100px',
-      }
-    );
-
-    const loaderElement = loader.current;
-    if (loaderElement) {
-      observerRef.current.observe(loaderElement);
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, [isLoading, exercises, displayLength, increaseDisplayLength]);
-
-  // Reset display length when exercises change
-  useEffect(() => {
-    setDisplayLength(10);
-  }, [exercises]);
+  const renderExercise = (exercise: ExerciseDto) => (
+    <div key={exercise._id}>
+      <h2>{exercise.name}</h2>
+    </div>
+  );
 
   return (
     <div>
       <h1>Exercise List</h1>
-      {!isLoading && exercises?.slice(0, displayLength).map((exercise) => (
-        <div key={exercise._id}>
-          <h2>{exercise.name}</h2>
-        </div>
-      ))}
-      {exercises && displayLength < exercises.length && (
-        <div ref={loader}>
-          {
-            displayLength < exercises?.length && <Spinner/>
-          }
-        </div>
-      )}
+      <InfiniteScroll
+        items={exercises?.slice(0, displayLength)}
+        isLoading={isLoading}
+        renderItem={renderExercise}
+        loadMore={increaseDisplayLength}
+        loadingComponent={<Spinner />}
+        hasReachedEnd={displayLength >= (exercises?.length ?? 0)}
+      />
     </div>
   );
 }
