@@ -5,6 +5,7 @@ import InfiniteScroll from "../components/InfiniteScroll";
 import { ExerciseDto } from "@/services/exerciseService";
 import { useCallback, useState } from "react";
 import { Spinner } from "../components/ui/spinner";
+import ExerciseSummary from "@/components/ExerciseSummary";
 
 export default function ExerciseListPage() {
   const { data: exercises, isLoading } = useExercises();
@@ -21,7 +22,7 @@ export default function ExerciseListPage() {
 
   const renderExercise = (exercise: ExerciseDto) => (
     <div key={exercise._id}>
-      <h2>{exercise.name}</h2>
+      <ExerciseSummary exercise={exercise} />
     </div>
   );
 
