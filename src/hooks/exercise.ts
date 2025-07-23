@@ -16,7 +16,7 @@ export const useExercises = (
   return useQuery({
     queryKey: exerciseKeys.all,
     queryFn: async () => {
-      const response = await api.get<ExerciseDto>({ ...config, url: '/exercise' });
+      const response = await api.get<ExerciseDto[]>({ ...config, url: '/exercise' });
       return response;
     },
     enabled: enabled && api.ready,
