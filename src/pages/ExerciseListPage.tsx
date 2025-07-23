@@ -1,10 +1,10 @@
 'use client';
 
 import { useExercises } from "@/hooks/exercise";
-import InfiniteScroll from "./InfiniteScroll";
+import InfiniteScroll from "../components/InfiniteScroll";
 import { ExerciseDto } from "@/services/exerciseService";
 import { useCallback, useState } from "react";
-import { Spinner } from "./ui/spinner";
+import { Spinner } from "../components/ui/spinner";
 
 export default function ExerciseListPage() {
   const { data: exercises, isLoading } = useExercises();
