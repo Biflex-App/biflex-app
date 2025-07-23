@@ -41,7 +41,7 @@ function ButtonListBaseItem({
 }) {
   return (
     <Button
-      className={cn('w-full h-12 justify-center bg-secondary-background max-w-md', className)}
+      className={cn('w-full h-12 justify-center bg-secondary-background', className)}
       onClick={onClick}
       disabled={isLoading}
     >
@@ -69,7 +69,7 @@ function ButtonListBaseItem({
 
 function ButtonListLinkItem(config: LinkItemConfig) {
   return (
-    <Link href={config.href} className="w-full max-w-md">
+    <Link href={config.href} className="w-full">
       <ButtonListBaseItem config={config}/>
     </Link>
   );
