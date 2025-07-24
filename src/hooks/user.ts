@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApi } from "./api";
-import { UserDto, UserRoutineDto } from "@/services/userService";
 import { AxiosRequestConfig } from "axios";
+import { UserDto, UserRoutineDto } from "@/types/user";
 
 export const userKeys = {
   all: ['users'] as const,

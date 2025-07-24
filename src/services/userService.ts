@@ -3,8 +3,8 @@ import User, { IUser } from "@/models/User";
 import Exercise from "@/models/Exercise";
 import dbConnect from "@/lib/db";
 import { Types } from "mongoose";
-import { RoutineDto } from "@/types/workout";
 import { toRoutineDto } from "./workoutService";
+import { UserDto, UserRoutineDto } from "@/types/user";
 
 export interface UserCreatePayload {
   handle: string
@@ -21,21 +21,6 @@ export interface UserUpdatePayload {
 
 export interface UserFilters {
   handle?: string | null
-}
-
-export interface UserRoutineDto {
-  routine: RoutineDto
-  enabled: boolean
-}
-
-export interface UserDto {
-  _id: string
-  handle: string
-  name: string
-  email?: string
-  routines?: UserRoutineDto[]
-  createdAt?: string
-  updatedAt?: string
 }
 
 export const toUserDto = (user: IUser | null, clerkId?: string | null) => {
