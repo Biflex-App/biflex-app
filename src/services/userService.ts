@@ -2,8 +2,9 @@ import { NotFoundResponse, UnauthorizedResponse } from "@/app/api/response";
 import User, { IUser } from "@/models/User";
 import Exercise from "@/models/Exercise";
 import dbConnect from "@/lib/db";
-import { RoutineDto, toRoutineDto } from "./workoutService";
 import { Types } from "mongoose";
+import { RoutineDto } from "@/types/workout";
+import { toRoutineDto } from "./workoutService";
 
 export interface UserCreatePayload {
   handle: string

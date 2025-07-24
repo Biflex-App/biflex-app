@@ -1,29 +1,8 @@
-import { IRoutine, IWorkout, WeightProgression, WorkoutExerciseDetail } from "@/models/Workout"
+import { IRoutine, IWorkout } from "@/models/Workout"
 import { Document, Types } from "mongoose"
 import { IExercise } from "@/models/Exercise"
-import { ExerciseDto } from "@/types/exercise"
 import { toExerciseDto } from "./exerciseService"
-
-export interface WorkoutExerciseDto {
-  exerciseId: string
-  exercise?: ExerciseDto
-  sets: number
-  details: WorkoutExerciseDetail
-  weightProgression: WeightProgression
-}
-
-export interface WorkoutDto {
-  name: string
-  exercises: WorkoutExerciseDto[]
-  schedule: number[]
-}
-
-export interface RoutineDto {
-  name: string
-  startDate: string
-  cycle: number
-  workouts: WorkoutDto[]
-}
+import { RoutineDto, WorkoutDto } from "@/types/workout"
 
 function isPopulated(exercise: Types.ObjectId | IExercise): exercise is IExercise {
   return exercise instanceof Document;

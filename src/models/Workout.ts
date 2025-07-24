@@ -1,38 +1,7 @@
 import { isPositiveInt } from "@/lib/utils";
 import { Schema, Types } from "mongoose";
 import { IExercise } from "./Exercise";
-
-export enum WorkoutExerciseDetailType {
-  FIXED_DUR = 'fixed-dur',
-  DUR = 'dur',
-  REP = 'rep',
-}
-
-export enum WeightProgression {
-  ASCENDING = 'ascending',
-  DESCENDING = 'descending',
-}
-
-interface IFixedDurExerciseDetail {
-  type: WorkoutExerciseDetailType.FIXED_DUR
-  duration: number
-}
-
-interface IDurExerciseDetail {
-  type: WorkoutExerciseDetailType.DUR
-  min: number
-  max: number
-  lastSetToFailure: boolean
-}
-
-interface IRepExerciseDetail {
-  type: WorkoutExerciseDetailType.REP
-  min: number
-  max: number
-  lastSetToFailure: boolean
-}
-
-export type WorkoutExerciseDetail = IFixedDurExerciseDetail | IDurExerciseDetail | IRepExerciseDetail;
+import { WeightProgression, WorkoutExerciseDetail, WorkoutExerciseDetailType } from "@/types/workout";
 
 export interface IWorkoutExercise {
   exercise: Types.ObjectId | IExercise
