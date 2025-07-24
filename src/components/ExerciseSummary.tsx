@@ -21,7 +21,7 @@ export default function ExerciseSummary({
       <div className="flex-1">
         <h2 className="mb-2">{exercise.name}</h2>
         <div className="flex flex-row gap-2">
-          <div className="flex-1 flex flex-row gap-2 flex-wrap">
+          <div className="flex-1 flex flex-row gap-2 flex-wrap items-start">
             {
               exercise.primaryMuscles.map((muscle) => (
                 <Badge key={muscle}>
