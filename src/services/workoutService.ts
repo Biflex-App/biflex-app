@@ -1,4 +1,4 @@
-import { IDurExerciseDetail, IFixedDurExerciseDetail, IRepExerciseDetail, IRoutine, IWorkout } from "@/models/Workout"
+import { IRoutine, IWorkout, WeightProgression, WorkoutExerciseDetail } from "@/models/Workout"
 import { ExerciseDto, toExerciseDto } from "./exerciseService"
 import { Document, Types } from "mongoose"
 import { IExercise } from "@/models/Exercise"
@@ -7,8 +7,8 @@ export interface WorkoutExerciseDto {
   exerciseId: string
   exercise?: ExerciseDto
   sets: number
-  details: IFixedDurExerciseDetail | IDurExerciseDetail | IRepExerciseDetail
-  weightProgression: 'ascending' | 'descending'
+  details: WorkoutExerciseDetail
+  weightProgression: WeightProgression
 }
 
 export interface WorkoutDto {

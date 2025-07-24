@@ -2,30 +2,43 @@ import { isPositiveInt } from "@/lib/utils";
 import { Schema, Types } from "mongoose";
 import { IExercise } from "./Exercise";
 
-export interface IFixedDurExerciseDetail {
-  type: 'fixed-dur'
+export enum WorkoutExerciseDetailType {
+  FIXED_DUR = 'fixed-dur',
+  DUR = 'dur',
+  REP = 'rep',
+}
+
+export enum WeightProgression {
+  ASCENDING = 'ascending',
+  DESCENDING = 'descending',
+}
+
+interface IFixedDurExerciseDetail {
+  type: WorkoutExerciseDetailType.FIXED_DUR
   duration: number
 }
 
-export interface IDurExerciseDetail {
-  type: 'dur'
+interface IDurExerciseDetail {
+  type: WorkoutExerciseDetailType.DUR
   min: number
   max: number
   lastSetToFailure: boolean
 }
 
-export interface IRepExerciseDetail {
-  type: 'rep'
+interface IRepExerciseDetail {
+  type: WorkoutExerciseDetailType.REP
   min: number
   max: number
   lastSetToFailure: boolean
 }
+
+export type WorkoutExerciseDetail = IFixedDurExerciseDetail | IDurExerciseDetail | IRepExerciseDetail;
 
 export interface IWorkoutExercise {
   exercise: Types.ObjectId | IExercise
   sets: number
-  details: IFixedDurExerciseDetail | IDurExerciseDetail | IRepExerciseDetail
-  weightProgression: 'ascending' | 'descending'
+  details: WorkoutExerciseDetail
+  weightProgression: WeightProgression
 }
 
 export interface IWorkout {
@@ -70,15 +83,15 @@ const workoutSchema: Schema = new Schema({
           validator: function (value: unknown) {
             if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
             const v = value as Record<string, unknown>;
-            if (v.type === 'fixed-dur') {
+            if (v.type === WorkoutExerciseDetailType.FIXED_DUR) {
               return isPositiveInt(v.duration)
                 && Object.keys(v).length === 2
-            } else if (v.type === 'dur') {
+            } else if (v.type === WorkoutExerciseDetailType.DUR) {
               return isPositiveInt(v.min)
                 && isPositiveInt(v.max)
                 && typeof v.lastSetToFailure === 'boolean'
                 && Object.keys(v).length === 4
-            } else if (v.type === 'rep') {
+            } else if (v.type === WorkoutExerciseDetailType.REP) {
               return isPositiveInt(v.min)
                 && isPositiveInt(v.max)
                 && typeof v.lastSetToFailure === 'boolean'
@@ -91,7 +104,7 @@ const workoutSchema: Schema = new Schema({
       },
       weightProgression: {
         type: String,
-        enum: ['ascending', 'descending'],
+        enum: Object.values(WeightProgression),
         required: true,
       },
     }
