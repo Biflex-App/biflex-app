@@ -43,6 +43,12 @@ export default function ExerciseListPage() {
     </Card>
   );
 
+  const loadingComponent = (
+    <div className="flex justify-center items-center h-full">
+      <Spinner />
+    </div>
+  );
+
   return (
     <div>
       <h1>Exercise List</h1>
@@ -51,7 +57,7 @@ export default function ExerciseListPage() {
         isLoading={isLoading}
         renderItem={renderExercise}
         loadMore={increaseDisplayLength}
-        loadingComponent={<Spinner />}
+        loadingComponent={loadingComponent}
         hasReachedEnd={displayLength >= (sortedExercises?.length ?? 0)}
       />
     </div>

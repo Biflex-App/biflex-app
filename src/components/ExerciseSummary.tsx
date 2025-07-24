@@ -1,9 +1,9 @@
 import { ExerciseDto } from "@/types/exercise";
-import Image from "next/image";
 import { Badge } from "./ui/badge";
 import { BookOpenTextIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import LoadingImage from "./LoadingImage";
 
 export default function ExerciseSummary({
   exercise,
@@ -16,12 +16,17 @@ export default function ExerciseSummary({
 }) {
   return (
     <div className="flex flex-row gap-1 w-full">
-      <Image src={exercise.images[exercise.images.length - 1]}
-        alt={exercise.name}
-        width={100}
-        height={100}
-        className="w-20 h-20 object-cover border-2 border-border flex-shrink-0"
-      />
+      <div>
+        <LoadingImage
+          src={exercise.images[exercise.images.length - 1]}
+          alt={exercise.name}
+          width={80}
+          height={80}
+          className="w-20 h-20 border-2 border-border flex-shrink-0"
+          spinnerSize="lg"
+          transitionDuration={1000}
+        />
+      </div>
       <div className="flex-1 p-1 min-w-0">
         <div className={cn("mb-1", truncateName && "truncate")}>{exercise.name}</div>
         <div className="flex flex-row gap-2">
