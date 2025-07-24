@@ -22,7 +22,12 @@ export default function ExerciseListPage() {
 
   const renderExercise = (exercise: ExerciseDto) => (
     <div key={exercise._id}>
-      <ExerciseSummary exercise={exercise} />
+      <ExerciseSummary
+        exercise={exercise}
+        onReadClick={() => {
+          console.log("read");
+        }}
+     />
     </div>
   );
 
