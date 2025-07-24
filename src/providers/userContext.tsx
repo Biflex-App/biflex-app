@@ -1,7 +1,7 @@
 'use client';
 
 import { useCurrentUser } from "@/hooks/user";
-import { UserDto } from "@/services/userService";
+import { UserDto } from "@/types/user";
 import { useAuth } from "@clerk/nextjs";
 import { createContext } from "react";
 

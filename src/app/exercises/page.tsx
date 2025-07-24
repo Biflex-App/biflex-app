@@ -1,4 +1,4 @@
-import ExerciseListPage from "@/pages/ExerciseListPage";
+import ExerciseListPage from "@/components/pages/ExerciseListPage";
 import WidthRestrict from "@/components/WidthRestrict";
 
 export default function HomePage() {

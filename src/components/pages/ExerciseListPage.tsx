@@ -1,10 +1,10 @@
 'use client';
 
 import { useExercises } from "@/hooks/exercise";
-import InfiniteScroll from "../components/InfiniteScroll";
+import InfiniteScroll from "../InfiniteScroll";
 import { ExerciseDto } from "@/types/exercise";
 import { useCallback, useMemo, useState } from "react";
-import { Spinner } from "../components/ui/spinner";
+import { Spinner } from "../ui/spinner";
 import ExerciseSummary from "@/components/ExerciseSummary";
 import { Card, CardContent } from "@/components/ui/card";
 
