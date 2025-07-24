@@ -6,6 +6,7 @@ import { ExerciseDto } from "@/types/exercise";
 import { useCallback, useMemo, useState } from "react";
 import { Spinner } from "../components/ui/spinner";
 import ExerciseSummary from "@/components/ExerciseSummary";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function ExerciseListPage() {
   const { data: exercises, isLoading } = useExercises();
@@ -29,14 +30,16 @@ export default function ExerciseListPage() {
   }, [exercises?.length]);
 
   const renderExercise = (exercise: ExerciseDto) => (
-    <div key={exercise._id}>
-      <ExerciseSummary
-        exercise={exercise}
-        onReadClick={() => {
-          console.log("read");
-        }}
-     />
-    </div>
+    <Card key={exercise._id} className="p-0 mb-4">
+      <CardContent className="p-0">
+        <ExerciseSummary
+          exercise={exercise}
+          onReadClick={() => {
+            console.log("read");
+          }}
+        />
+      </CardContent>
+    </Card>
   );
 
   return (

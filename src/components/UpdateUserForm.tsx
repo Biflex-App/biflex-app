@@ -15,7 +15,7 @@ import { Spinner } from "./ui/spinner";
 import { useRouter } from "next/navigation";
 import { ApiError } from "@/lib/api";
 import { toast } from "sonner";
-import { UserDto } from "@/services/userService";
+import { UserDto } from "@/types/user";
 
 const formSchema = z.object({
   email: z.string(),

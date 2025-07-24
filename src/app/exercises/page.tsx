@@ -4,7 +4,9 @@ import WidthRestrict from "@/components/WidthRestrict";
 export default function HomePage() {
   return (
     <WidthRestrict>
-      <ExerciseListPage />
+      <main className="p-2 mb-10">
+        <ExerciseListPage />
+      </main>
     </WidthRestrict>
   );
 }
