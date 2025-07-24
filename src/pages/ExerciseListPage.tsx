@@ -3,13 +3,21 @@
 import { useExercises } from "@/hooks/exercise";
 import InfiniteScroll from "../components/InfiniteScroll";
 import { ExerciseDto } from "@/services/exerciseService";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Spinner } from "../components/ui/spinner";
 import ExerciseSummary from "@/components/ExerciseSummary";
 
 export default function ExerciseListPage() {
   const { data: exercises, isLoading } = useExercises();
   const [displayLength, setDisplayLength] = useState(10);
+
+  const sortedExercises = useMemo(() => {
+    return exercises?.sort((a, b) => a.name.localeCompare(b.name));
+  }, [exercises]);
+
+  const displayedExercises = useMemo(() => {
+    return sortedExercises?.slice(0, displayLength);
+  }, [sortedExercises, displayLength]);
 
   const increaseDisplayLength = useCallback(() => {
     setDisplayLength(d => {
@@ -35,12 +43,12 @@ export default function ExerciseListPage() {
     <div>
       <h1>Exercise List</h1>
       <InfiniteScroll
-        items={exercises?.slice(0, displayLength)}
+        items={displayedExercises}
         isLoading={isLoading}
         renderItem={renderExercise}
         loadMore={increaseDisplayLength}
         loadingComponent={<Spinner />}
-        hasReachedEnd={displayLength >= (exercises?.length ?? 0)}
+        hasReachedEnd={displayLength >= (sortedExercises?.length ?? 0)}
       />
     </div>
   );
