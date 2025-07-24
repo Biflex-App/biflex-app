@@ -1,53 +1,79 @@
 import mongoose, { Schema, Document, Model, Types } from 'mongoose';
 
+export enum ExerciseForce {
+  STATIC = 'static',
+  PULL = 'pull',
+  PUSH = 'push',
+}
+
+export enum ExerciseLevel {
+  BEGINNER = 'beginner',
+  INTERMEDIATE = 'intermediate',
+  EXPERT = 'expert',
+}
+
+export enum ExerciseMechanic {
+  ISOLATION = 'isolation',
+  COMPOUND = 'compound',
+}
+
+export enum ExerciseEquipment {
+  MEDICINE_BALL = 'medicine ball',
+  DUMBBELL = 'dumbbell',
+  BODY_ONLY = 'body only',
+  BANDS = 'bands',
+  KETTLEBELLS = 'kettlebells',
+  FOAM_ROLL = 'foam roll',
+  CABLE = 'cable',
+  MACHINE = 'machine',
+  BARBELL = 'barbell',
+  EXERCISE_BALL = 'exercise ball',
+  EZ_CURL_BAR = 'e-z curl bar',
+  OTHER = 'other',
+}
+
+export enum ExerciseMuscle {
+  ABDOMINALS = 'abdominals',
+  ABDUCTORS = 'abductors',
+  ADDUCTORS = 'adductors',
+  BICEPS = 'biceps',
+  CALVES = 'calves',
+  CHEST = 'chest',
+  FOREARMS = 'forearms',
+  GLUTES = 'glutes',
+  HAMSTRINGS = 'hamstrings',
+  LATS = 'lats',
+  LOWER_BACK = 'lower back',
+  MIDDLE_BACK = 'middle back',
+  NECK = 'neck',
+  QUADRICEPS = 'quadriceps',
+  SHOULDERS = 'shoulders',
+  TRAPS = 'traps',
+  TRICEPS = 'triceps',
+}
+
+export enum ExerciseCategory {
+  POWERLIFTING = 'powerlifting',
+  STRENGTH = 'strength',
+  STRETCHING = 'stretching',
+  CARDIO = 'cardio',
+  OLYMPIC_WEIGHTLIFTING = 'olympic weightlifting',
+  STRONGMAN = 'strongman',
+  PLYOMETRICS = 'plyometrics',
+}
+
 export interface IExercise extends Document {
   _id: Types.ObjectId
   jsonId: string
   name: string
-  force: 'static' | 'pull' | 'push' | null
-  level: 'beginner' | 'intermediate' | 'expert'
-  mechanic: 'isolation' | 'compound' | null
-  equipment: 'medicine ball' | 'dumbbell' | 'body only' | 'bands' | 'kettlebells' | 'foam roll' | 'cable' | 'machine' | 'barbell' | 'exercise ball' | 'e-z curl bar' | 'other' | null
-  primaryMuscles: (
-    | 'abdominals'
-    | 'abductors'
-    | 'adductors'
-    | 'biceps'
-    | 'calves'
-    | 'chest'
-    | 'forearms'
-    | 'glutes'
-    | 'hamstrings'
-    | 'lats'
-    | 'lower back'
-    | 'middle back'
-    | 'neck'
-    | 'quadriceps'
-    | 'shoulders'
-    | 'traps'
-    | 'triceps'
-  )[]
-  secondaryMuscles: (
-    | 'abdominals'
-    | 'abductors'
-    | 'adductors'
-    | 'biceps'
-    | 'calves'
-    | 'chest'
-    | 'forearms'
-    | 'glutes'
-    | 'hamstrings'
-    | 'lats'
-    | 'lower back'
-    | 'middle back'
-    | 'neck'
-    | 'quadriceps'
-    | 'shoulders'
-    | 'traps'
-    | 'triceps'
-  )[]
+  force: ExerciseForce | null
+  level: ExerciseLevel
+  mechanic: ExerciseMechanic | null
+  equipment: ExerciseEquipment | null
+  primaryMuscles: ExerciseMuscle[]
+  secondaryMuscles: ExerciseMuscle[]
   instructions: string[]
-  category: 'powerlifting' | 'strength' | 'stretching' | 'cardio' | 'olympic weightlifting' | 'strongman' | 'plyometrics'
+  category: ExerciseCategory
   images: string[]
   createdAt: Date
   updatedAt: Date
@@ -67,85 +93,35 @@ const ExerciseSchema: Schema = new Schema(
     },
     force: {
       type: String,
-      enum: [null, 'static', 'pull', 'push'],
+      enum: [null, ...Object.values(ExerciseForce)],
       default: null,
     },
     level: {
       type: String,
       required: true,
-      enum: ['beginner', 'intermediate', 'expert'],
+      enum: Object.values(ExerciseLevel),
     },
     mechanic: {
       type: String,
-      enum: ['isolation', 'compound', null],
+      enum: [null, ...Object.values(ExerciseMechanic)],
       default: null,
     },
     equipment: {
       type: String,
-      enum: [
-        null,
-        'medicine ball',
-        'dumbbell',
-        'body only',
-        'bands',
-        'kettlebells',
-        'foam roll',
-        'cable',
-        'machine',
-        'barbell',
-        'exercise ball',
-        'e-z curl bar',
-        'other',
-      ],
+      enum: [null, ...Object.values(ExerciseEquipment)],
       default: null,
     },
     primaryMuscles: [
       {
         type: String,
-        enum: [
-          'abdominals',
-          'abductors',
-          'adductors',
-          'biceps',
-          'calves',
-          'chest',
-          'forearms',
-          'glutes',
-          'hamstrings',
-          'lats',
-          'lower back',
-          'middle back',
-          'neck',
-          'quadriceps',
-          'shoulders',
-          'traps',
-          'triceps',
-        ],
+        enum: Object.values(ExerciseMuscle),
         required: true,
       },
     ],
     secondaryMuscles: [
       {
         type: String,
-        enum: [
-          'abdominals',
-          'abductors',
-          'adductors',
-          'biceps',
-          'calves',
-          'chest',
-          'forearms',
-          'glutes',
-          'hamstrings',
-          'lats',
-          'lower back',
-          'middle back',
-          'neck',
-          'quadriceps',
-          'shoulders',
-          'traps',
-          'triceps',
-        ],
+        enum: Object.values(ExerciseMuscle),
         required: true,
       },
     ],
@@ -158,15 +134,7 @@ const ExerciseSchema: Schema = new Schema(
     category: {
       type: String,
       required: true,
-      enum: [
-        'powerlifting',
-        'strength',
-        'stretching',
-        'cardio',
-        'olympic weightlifting',
-        'strongman',
-        'plyometrics',
-      ],
+      enum: Object.values(ExerciseCategory),
     },
     images: [
       {

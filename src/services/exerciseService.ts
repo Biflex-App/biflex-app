@@ -1,18 +1,18 @@
-import Exercise, { IExercise } from "@/models/Exercise";
+import Exercise, { IExercise, ExerciseForce, ExerciseLevel, ExerciseMechanic, ExerciseEquipment, ExerciseMuscle, ExerciseCategory } from "@/models/Exercise";
 import dbConnect from "@/lib/db";
 
 export interface ExerciseDto {
   _id: string
   jsonId: string
   name: string
-  force: IExercise['force']
-  level: IExercise['level']
-  mechanic: IExercise['mechanic']
-  equipment: IExercise['equipment']
-  primaryMuscles: IExercise['primaryMuscles']
-  secondaryMuscles: IExercise['secondaryMuscles']
+  force: ExerciseForce | null
+  level: ExerciseLevel
+  mechanic: ExerciseMechanic | null
+  equipment: ExerciseEquipment | null
+  primaryMuscles: ExerciseMuscle[]
+  secondaryMuscles: ExerciseMuscle[]
   instructions: string[]
-  category: IExercise['category']
+  category: ExerciseCategory
   images: string[]
   createdAt: string
   updatedAt: string
