@@ -1,22 +1,6 @@
-import Exercise, { IExercise, ExerciseForce, ExerciseLevel, ExerciseMechanic, ExerciseEquipment, ExerciseMuscle, ExerciseCategory } from "@/models/Exercise";
+import Exercise, { IExercise } from "@/models/Exercise";
+import { ExerciseDto } from "@/types/exercise";
 import dbConnect from "@/lib/db";
-
-export interface ExerciseDto {
-  _id: string
-  jsonId: string
-  name: string
-  force: ExerciseForce | null
-  level: ExerciseLevel
-  mechanic: ExerciseMechanic | null
-  equipment: ExerciseEquipment | null
-  primaryMuscles: ExerciseMuscle[]
-  secondaryMuscles: ExerciseMuscle[]
-  instructions: string[]
-  category: ExerciseCategory
-  images: string[]
-  createdAt: string
-  updatedAt: string
-}
 
 export const toExerciseDto = (exercise: IExercise | null) => {
   if (!exercise) {

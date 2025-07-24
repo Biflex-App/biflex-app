@@ -2,7 +2,7 @@
 
 import { useExercises } from "@/hooks/exercise";
 import InfiniteScroll from "../components/InfiniteScroll";
-import { ExerciseDto } from "@/services/exerciseService";
+import { ExerciseDto } from "@/types/exercise";
 import { useCallback, useMemo, useState } from "react";
 import { Spinner } from "../components/ui/spinner";
 import ExerciseSummary from "@/components/ExerciseSummary";

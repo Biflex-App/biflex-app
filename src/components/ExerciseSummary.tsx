@@ -1,4 +1,4 @@
-import { ExerciseDto } from "@/services/exerciseService";
+import { ExerciseDto } from "@/types/exercise";
 import Image from "next/image";
 import { Badge } from "./ui/badge";
 import { BookOpenTextIcon } from "lucide-react";

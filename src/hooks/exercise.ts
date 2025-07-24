@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import { useApi } from "./api";
 import { useQuery } from "@tanstack/react-query";
-import { ExerciseDto } from "@/services/exerciseService";
+import { ExerciseDto } from "@/types/exercise";
 
 export const exerciseKeys = {
   all: ['exercises'] as const,
