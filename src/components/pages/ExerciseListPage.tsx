@@ -37,6 +37,7 @@ export default function ExerciseListPage() {
           onReadClick={() => {
             console.log("read");
           }}
+          truncateName={true}
         />
       </CardContent>
     </Card>
