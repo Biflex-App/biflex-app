@@ -34,9 +34,7 @@ export default function ExerciseListPage() {
       <CardContent className="p-0">
         <ExerciseSummary
           exercise={exercise}
-          onReadClick={() => {
-            console.log("read");
-          }}
+          showReadButton
           truncateName={true}
         />
       </CardContent>
