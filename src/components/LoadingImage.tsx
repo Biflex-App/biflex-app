@@ -6,8 +6,9 @@ import { cn } from "@/lib/utils";
 interface LoadingImageProps {
   src: string;
   alt: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
+  fill?: boolean;
   className?: string;
   spinnerSize?: "sm" | "md" | "lg";
   transitionDuration?: number;
@@ -18,9 +19,10 @@ export default function LoadingImage({
   alt,
   width,
   height,
+  fill = false,
   className = "",
   spinnerSize = "lg",
-  transitionDuration = 500
+  transitionDuration = 500,
 }: LoadingImageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [showSpinner, setShowSpinner] = useState(false);
@@ -57,6 +59,7 @@ export default function LoadingImage({
           setIsLoading(false);
           setShowSpinner(false);
         }}
+        fill={fill}
       />
     </div>
   );

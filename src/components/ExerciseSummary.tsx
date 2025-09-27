@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import LoadingImage from "./LoadingImage";
 import { Drawer, DrawerContent, DrawerTrigger } from "./ui/drawer";
-import { ExerciseDetail } from "./ExerciseDetail";
+import { ExerciseDetail } from "./ExerciseDetail/ExerciseDetail";
 
 export default function ExerciseSummary({
   exercise,
